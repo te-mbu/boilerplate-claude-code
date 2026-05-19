@@ -1,0 +1,121 @@
+{
+  "common": {
+    "readMore": "Lire la suite",
+    "learnMore": "En savoir plus",
+    "getStarted": "Commencer",
+    "contactUs": "Nous contacter",
+    "backToHome": "Retour à l'accueil",
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "close": "Fermer",
+    "open": "Ouvrir",
+    "submit": "Envoyer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "search": "Rechercher",
+    "noResults": "Aucun résultat",
+    "seeAll": "Voir tout",
+    "previous": "Précédent",
+    "next": "Suivant"
+  },
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "services": "Services",
+    "portfolio": "Portfolio",
+    "blog": "Blog",
+    "pricing": "Tarifs",
+    "contact": "Contact",
+    "team": "Équipe",
+    "features": "Fonctionnalités",
+    "changelog": "Nouveautés"
+  },
+  "footer": {
+    "tagline": "Votre partenaire digital.",
+    "newsletter": {
+      "heading": "Restez informé",
+      "placeholder": "Votre email",
+      "button": "S'abonner",
+      "success": "Merci pour votre inscription !"
+    },
+    "legal": {
+      "privacy": "Politique de confidentialité",
+      "terms": "Conditions d'utilisation",
+      "mentions": "Mentions légales"
+    },
+    "copyright": "Tous droits réservés."
+  },
+  "contact": {
+    "heading": "Contactez-nous",
+    "description": "Une question, un projet ? N'hésitez pas à nous écrire.",
+    "form": {
+      "name": "Nom complet",
+      "email": "Email",
+      "company": "Entreprise",
+      "phone": "Téléphone",
+      "message": "Votre message",
+      "submit": "Envoyer le message",
+      "success": "Message envoyé avec succès ! Nous vous répondrons rapidement.",
+      "error": "Erreur lors de l'envoi. Veuillez réessayer."
+    }
+  },
+  "blog": {
+    "heading": "Blog",
+    "readingTime": "{minutes} min de lecture",
+    "publishedOn": "Publié le {date}",
+    "by": "Par {author}",
+    "categories": "Catégories",
+    "allPosts": "Tous les articles",
+    "relatedPosts": "Articles similaires",
+    "noPosts": "Aucun article pour le moment."
+  },
+  "pricing": {
+    "heading": "Nos tarifs",
+    "monthly": "Mensuel",
+    "yearly": "Annuel",
+    "savePercent": "Économisez {percent}%",
+    "popular": "Le plus populaire",
+    "cta": "Choisir ce plan",
+    "perMonth": "/mois",
+    "perYear": "/an"
+  },
+  "diagnostic": {
+    "heading": "Diagnostic gratuit",
+    "description": "Répondez à quelques questions pour obtenir des recommandations personnalisées.",
+    "step": "Étape {current} sur {total}",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "submit": "Voir mes résultats",
+    "results": {
+      "heading": "Vos résultats",
+      "score": "Score : {score}/{max}",
+      "recommendations": "Nos recommandations",
+      "cta": "Réserver un appel"
+    }
+  },
+  "cookies": {
+    "message": "Nous utilisons des cookies pour améliorer votre expérience.",
+    "accept": "Accepter",
+    "reject": "Refuser",
+    "settings": "Paramètres",
+    "necessary": "Nécessaires",
+    "analytics": "Analytiques",
+    "marketing": "Marketing",
+    "save": "Enregistrer mes préférences"
+  },
+  "error": {
+    "404": {
+      "heading": "Page introuvable",
+      "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+      "cta": "Retour à l'accueil"
+    },
+    "500": {
+      "heading": "Erreur serveur",
+      "description": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+      "cta": "Réessayer"
+    }
+  }
+}

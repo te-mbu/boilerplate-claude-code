@@ -1,0 +1,121 @@
+{
+  "common": {
+    "readMore": "Read more",
+    "learnMore": "Learn more",
+    "getStarted": "Get started",
+    "contactUs": "Contact us",
+    "backToHome": "Back to home",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "close": "Close",
+    "open": "Open",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "noResults": "No results",
+    "seeAll": "See all",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "portfolio": "Portfolio",
+    "blog": "Blog",
+    "pricing": "Pricing",
+    "contact": "Contact",
+    "team": "Team",
+    "features": "Features",
+    "changelog": "Changelog"
+  },
+  "footer": {
+    "tagline": "Your digital partner.",
+    "newsletter": {
+      "heading": "Stay informed",
+      "placeholder": "Your email",
+      "button": "Subscribe",
+      "success": "Thank you for subscribing!"
+    },
+    "legal": {
+      "privacy": "Privacy policy",
+      "terms": "Terms of service",
+      "mentions": "Legal notice"
+    },
+    "copyright": "All rights reserved."
+  },
+  "contact": {
+    "heading": "Contact us",
+    "description": "Have a question or a project? Don't hesitate to reach out.",
+    "form": {
+      "name": "Full name",
+      "email": "Email",
+      "company": "Company",
+      "phone": "Phone",
+      "message": "Your message",
+      "submit": "Send message",
+      "success": "Message sent successfully! We'll get back to you shortly.",
+      "error": "Error sending message. Please try again."
+    }
+  },
+  "blog": {
+    "heading": "Blog",
+    "readingTime": "{minutes} min read",
+    "publishedOn": "Published on {date}",
+    "by": "By {author}",
+    "categories": "Categories",
+    "allPosts": "All posts",
+    "relatedPosts": "Related posts",
+    "noPosts": "No posts yet."
+  },
+  "pricing": {
+    "heading": "Pricing",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "savePercent": "Save {percent}%",
+    "popular": "Most popular",
+    "cta": "Choose this plan",
+    "perMonth": "/month",
+    "perYear": "/year"
+  },
+  "diagnostic": {
+    "heading": "Free diagnostic",
+    "description": "Answer a few questions to get personalized recommendations.",
+    "step": "Step {current} of {total}",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "See my results",
+    "results": {
+      "heading": "Your results",
+      "score": "Score: {score}/{max}",
+      "recommendations": "Our recommendations",
+      "cta": "Book a call"
+    }
+  },
+  "cookies": {
+    "message": "We use cookies to improve your experience.",
+    "accept": "Accept",
+    "reject": "Reject",
+    "settings": "Settings",
+    "necessary": "Necessary",
+    "analytics": "Analytics",
+    "marketing": "Marketing",
+    "save": "Save my preferences"
+  },
+  "error": {
+    "404": {
+      "heading": "Page not found",
+      "description": "The page you're looking for doesn't exist or has been moved.",
+      "cta": "Back to home"
+    },
+    "500": {
+      "heading": "Server error",
+      "description": "An unexpected error occurred. Please try again.",
+      "cta": "Retry"
+    }
+  }
+}
