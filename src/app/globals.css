@@ -92,6 +92,7 @@
   to {
     transform: translateX(-100%);
   }
+}
 
 :root {
   --background: oklch(1 0 0);
