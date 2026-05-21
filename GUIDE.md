@@ -273,15 +273,12 @@ Tu peux relancer `pnpm setup` autant de fois que nécessaire après avoir modifi
 ### Prérequis
 
 1. `design-system/client-brief.md` doit être rempli (au minimum : industry, brand personality, visual direction)
-2. Le skill `ui-ux-pro-max` doit être présent dans `.claude/skills/`
+2. Le skill `taste` doit être présent dans `.claude/skills/taste/`
 
 ### Ce qu'il fait
 
 1. **Parse le client-brief.md** pour extraire l'industrie, la personnalité, les préférences visuelles
-2. **Appelle le skill ui-ux-pro-max 3 fois** :
-   - `--domain color` → palette de couleurs recommandée
-   - `--domain typography` → pairings de fonts recommandés
-   - `--domain style` → direction stylistique (glassmorphism, editorial, etc.)
+2. **Génère des tokens baseline** (couleurs, typography, style) à partir du brief
 3. **Affiche une proposition** avec les tokens proposés
 4. **Demande validation** (y/n)
 5. **Applique si validé** :
@@ -509,7 +506,7 @@ Claude choisit automatiquement le pattern adapté au contenu de chaque card.
 
 | Skill | Quand l'utiliser | Commande type |
 |-------|------------------|---------------|
-| **ui-ux-pro-max** | Avant de construire n'importe quel UI | `python3 .claude/skills/ui-ux-pro-max/scripts/search.py "creative agency premium" --design-system` |
+| **taste** | Avant de construire n'importe quel UI | Auto — Claude lit `.claude/skills/taste/SKILL.md` et applique les design rules |
 | **gsap-core** | Quand Claude écrit du code GSAP | Auto — Claude le consulte automatiquement |
 | **gsap-react** | Animations dans les composants React/Next.js | Auto |
 | **gsap-scrolltrigger** | Animations liées au scroll | Auto |
@@ -523,16 +520,15 @@ Claude choisit automatiquement le pattern adapté au contenu de chaque card.
 | **brand** | Voice, identité visuelle, messaging | Quand tu travailles sur le contenu/branding |
 | **seo** | Analyse SEO | Quand tu optimises le référencement |
 
-### Commandes ui-ux-pro-max par besoin
+### Taste skill — 3 dials ajustables
 
-| Besoin | Commande |
-|--------|----------|
-| Direction complète pour un nouveau projet | `--design-system -p "Client Name"` |
-| Options de style | `--domain style "glassmorphism editorial dark"` |
-| Palette de couleurs | `--domain color "agency premium dark mode"` |
-| Pairings de fonts | `--domain typography "elegant serif modern"` |
-| Best practices UX | `--domain ux "animation scroll loading forms"` |
-| Structure de landing page | `--domain landing "hero social-proof cta saas"` |
+| Dial | Default | Effet |
+|------|---------|-------|
+| DESIGN_VARIANCE (1-10) | 8 | 1-3=Symétrique, 4-7=Offset, 8-10=Asymétrique |
+| MOTION_INTENSITY (1-10) | 6 | 1-3=Static, 4-7=GSAP fluide, 8-10=ScrollTrigger avancé |
+| VISUAL_DENSITY (1-10) | 4 | 1-3=Art Gallery, 4-7=Standard, 8-10=Cockpit |
+
+Ajuste dynamiquement dans le prompt : "plus aéré" → VISUAL_DENSITY=2, "plus animé" → MOTION_INTENSITY=9, etc.
 
 ---
 

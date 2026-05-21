@@ -2,8 +2,8 @@
 /**
  * Design Tokens Generator
  * =======================
- * Reads design-system/client-brief.md, calls ui-ux-pro-max skill,
- * proposes design tokens, and applies them after user validation.
+ * Reads design-system/client-brief.md, generates design token proposals
+ * based on the brief, and applies them after user validation.
  *
  * Usage: pnpm design
  * Re-runnable: yes (idempotent)
@@ -11,7 +11,6 @@
 
 import fs from "fs";
 import path from "path";
-import { execSync } from "child_process";
 import readline from "readline";
 import { hexToOklch, isLight } from "./utils/color.js";
 
@@ -20,7 +19,6 @@ const BRIEF_PATH = path.join(ROOT, "design-system/client-brief.md");
 const GLOBALS_CSS = path.join(ROOT, "src/app/globals.css");
 const DECISIONS_MD = path.join(ROOT, "design-system/decisions.md");
 const CLIENT_CONFIG = path.join(ROOT, "client.config.ts");
-const SKILL_SCRIPT = path.join(ROOT, ".claude/skills/ui-ux-pro-max/scripts/search.py");
 
 // =============================================================================
 // Types
@@ -143,125 +141,35 @@ function parseBrief(): BriefData {
 }
 
 // =============================================================================
-// Skill calls
+// Recommendation builders (baseline defaults — Claude refines via taste skill)
 // =============================================================================
-function callSkill(args: string): string {
-  try {
-    return execSync(`python3 "${SKILL_SCRIPT}" ${args}`, {
-      cwd: ROOT,
-      encoding: "utf-8",
-      timeout: 30000,
-    });
-  } catch {
-    return "";
-  }
-}
-
-function callSkillJson(args: string): unknown[] {
-  const raw = callSkill(`${args} --json`);
-  try {
-    const parsed = JSON.parse(raw);
-    return parsed.results ?? [];
-  } catch {
-    return [];
-  }
-}
-
-function buildSearchQuery(brief: BriefData): string {
-  const parts = [
-    brief.industry,
-    ...brief.brandPersonality,
-    brief.colorMood.replace(/#[0-9a-fA-F]{6}/g, "").trim(),
-  ].filter(Boolean);
-  return parts.join(" ").slice(0, 100);
-}
-
-// =============================================================================
-// Recommendation builders
-// =============================================================================
-function getColorRecommendation(brief: BriefData): ColorPalette {
-  const query = buildSearchQuery(brief);
-  const results = callSkillJson(`"${query}" -d color`) as Record<string, string>[];
-
-  if (results.length === 0) {
-    return {
-      primary: "#0a0a0a",
-      cta: "#2563eb",
-      success: "#16a34a",
-      destructive: "#dc2626",
-      background: "#ffffff",
-      foreground: "#0a0a0a",
-      muted: "#f5f5f5",
-      border: "#e5e5e5",
-      notes: "Default palette (no skill match)",
-    };
-  }
-
-  const best = results[0];
+function getColorRecommendation(_brief: BriefData): ColorPalette {
   return {
-    primary: best["Primary"] ?? "#0a0a0a",
-    cta: best["Accent"] ?? best["Secondary"] ?? "#2563eb",
+    primary: "#0a0a0a",
+    cta: "#2563eb",
     success: "#16a34a",
-    destructive: best["Destructive"] ?? "#dc2626",
-    background: best["Background"] ?? "#ffffff",
-    foreground: best["Foreground"] ?? "#0a0a0a",
-    muted: best["Muted"] ?? "#f5f5f5",
-    border: best["Border"] ?? "#e5e5e5",
-    notes: best["Notes"] ?? "",
+    destructive: "#dc2626",
+    background: "#ffffff",
+    foreground: "#0a0a0a",
+    muted: "#f5f5f5",
+    border: "#e5e5e5",
+    notes: "Baseline palette — customize via client.config.ts or ask Claude to refine",
   };
 }
 
-function getTypographyRecommendation(brief: BriefData): TypographyRec {
-  const query = buildSearchQuery(brief);
-  const results = callSkillJson(`"${query}" -d typography`) as Record<string, string>[];
-
-  if (results.length === 0) {
-    return {
-      pairingName: "Default",
-      headingFont: "",
-      bodyFont: "",
-      mood: "",
-      googleFontsUrl: "",
-    };
-  }
-
-  const best = results[0];
-  // Extract Google Fonts-compatible heading font name
-  // The skill sometimes returns fonts not on Google Fonts, with a note about alternatives
-  const notes = best["Notes"] ?? "";
-  const headingFont = best["Heading Font"] ?? "";
-  const tailwindConfig = best["Tailwind Config"] ?? "";
-
-  // If the notes mention a Google alternative, prefer it
-  const googleAlt = notes.match(/(\w+)\s+as Google alternative/i);
-  const resolvedHeading = googleAlt ? googleAlt[1] : headingFont;
-
-  // Try to extract from Tailwind Config if available
-  const headingFromTw = tailwindConfig.match(/heading:\s*\['([^']+)'/)?.[1];
-
+function getTypographyRecommendation(_brief: BriefData): TypographyRec {
   return {
-    pairingName: best["Font Pairing Name"] ?? "",
-    headingFont: headingFromTw ?? resolvedHeading,
-    bodyFont: best["Body Font"] ?? "",
-    mood: best["Mood/Style Keywords"] ?? "",
-    googleFontsUrl: best["Google Fonts URL"] ?? "",
+    pairingName: "Default",
+    headingFont: "",
+    bodyFont: "",
+    mood: "",
+    googleFontsUrl: "",
   };
 }
 
-function getStyleRecommendation(brief: BriefData): StyleRec {
-  const query = buildSearchQuery(brief);
-  const results = callSkillJson(`"${query}" -d style`) as Record<string, string>[];
-
-  if (results.length === 0) {
-    return {
-      category: "Clean Modern",
-      keywords: "",
-      effects: "",
-      designSystemVars: "",
-    };
-  }
-
-  const best = results[0];
+function getStyleRecommendation(_brief: BriefData): StyleRec {
+  // kept inline to preserve compatibility with the rest of the script
+  const best: Record<string, string> = {};
   return {
     category: best["Style Category"] ?? "",
     keywords: best["Keywords"] ?? "",
@@ -331,8 +239,8 @@ function deriveDarkVariant(hex: string, isBackground: boolean): string {
 // Build proposal
 // =============================================================================
 function buildProposal(brief: BriefData): DesignProposal {
-  console.log("🔍 Analyzing brief and querying skill...");
-  console.log(`   Query: "${buildSearchQuery(brief)}"`);
+  console.log("🔍 Analyzing brief...");
+  console.log(`   Client: ${brief.clientName} (${brief.industry})`);
   console.log("");
 
   const colors = getColorRecommendation(brief);
@@ -517,7 +425,7 @@ function applyProposal(proposal: DesignProposal): void {
 - **Typography:** ${headingFont || "system default"} (heading) — ${proposal.typography.mood}
 - **Radius:** ${proposal.radius} | **Spacing:** ${proposal.spacing} | **Shadows:** ${proposal.shadows}
 - **Locked from client brand:** ${proposal.lockedFont ? `font: ${proposal.lockedFont}` : "none"}${proposal.lockedColors.length > 0 ? `, colors: ${proposal.lockedColors.join(", ")}` : ""}
-- **Why added:** Auto-generated baseline from client brief + ui-ux-pro-max skill. Iterate from here.
+- **Why added:** Auto-generated baseline from client brief + taste skill. Iterate from here.
 `;
 
   let decisions = fs.readFileSync(DECISIONS_MD, "utf-8");

@@ -6,7 +6,7 @@ You are building a website for [CLIENT_NAME]. Read the design system files befor
 ## Architecture
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS 4 + pnpm
 - UI primitives: shadcn/ui (src/components/ui/) — do NOT create duplicates
-- Design intelligence: ui-ux-pro-max skill (.claude/skills/ui-ux-pro-max/) — ALWAYS consult before building UI
+- Design intelligence: taste skill (.claude/skills/taste/) — READ before building any UI
 - Custom components: src/components/{layout,sections,shared}/
 - Animations: GSAP (client-only, use-gsap hook, respect prefers-reduced-motion)
 - CMS: Content layer abstraction (src/lib/content/) — toggle via CONTENT_PROVIDER env
@@ -37,39 +37,22 @@ You are building a website for [CLIENT_NAME]. Read the design system files befor
 - params and searchParams are Promises in Next.js 15+ — always await
 - 1-3 tasks at a time. Show result before continuing.
 
-## Design Intelligence — ui-ux-pro-max + shadcn/ui
+## Design Intelligence — taste skill + shadcn/ui
 
 BEFORE building any UI (new page, new section, new component), follow this process:
 
-### Step 1: Consult the skill for design direction
-Run the design system search to get style, palette, typography, and UX recommendations:
-```bash
-python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<client_industry> <site_type> <keywords>" --design-system -p "<client_name>"
-```
-Example: `python3 .claude/skills/ui-ux-pro-max/scripts/search.py "creative agency portfolio premium" --design-system -p "Basanto"`
+### Step 1: Read the taste skill
+Read `.claude/skills/taste/SKILL.md` to internalize the design engineering rules (bias correction, typography, color, layout, motion, forbidden patterns).
 
-### Step 2: Map recommendations to project tokens
-The skill returns style, colors, typography, effects. Map them to:
-- Colors → CSS variables in `globals.css` (--primary, --cta, etc.)
-- Typography → `headingFont` in `client.config.ts` + body font in `layout.tsx`
-- Spacing/radius → `--radius`, `--spacing-section` in `globals.css`
-- Style direction → record in `design-system/decisions.md`
+### Step 2: Check the dials
+The taste skill has 3 dials (DESIGN_VARIANCE, MOTION_INTENSITY, VISUAL_DENSITY) at baseline (8, 6, 4). Adjust based on the client brief and user requests. These dials drive layout, animation, and spacing decisions.
 
 ### Step 3: Build with shadcn/ui primitives
 Compose UI using existing shadcn components (Button, Card, Badge, Separator, Accordion, etc.).
-The skill provides the "what" (style, colors, patterns) — shadcn provides the "how" (accessible components).
+The taste skill provides the "what" (rules, anti-patterns, creative arsenal) — shadcn provides the "how" (accessible components).
 
-### Step 4: Validate against skill rules
-Before delivering, check Quick Reference §1-§3 (Accessibility, Touch & Interaction, Performance) from the skill.
-
-### When to search specific domains
-| Need | Command |
-|------|---------|
-| Style options | `--domain style "glassmorphism editorial"` |
-| Color palettes | `--domain color "agency premium dark"` |
-| Font pairings | `--domain typography "elegant modern"` |
-| UX best practices | `--domain ux "animation scroll loading"` |
-| Landing structure | `--domain landing "hero social-proof cta"` |
+### Step 4: Run the pre-flight check
+Before delivering, run through Section 9 (Pre-Flight Check) of the taste skill.
 
 ## File Structure
 src/app/(site)/ — all pages with shared nav+footer layout
@@ -118,7 +101,7 @@ The developer sends a screenshot + HTML/CSS from another site to adapt for the c
 
 **Rules:**
 - Always read `design-system/client-brief.md` first to understand the client's visual identity
-- Run `--domain style` or `--domain landing` from ui-ux-pro-max if unsure which pattern fits best
+- Read the taste skill's Creative Arsenal (Section 8) if unsure which pattern fits best
 - NEVER copy colors, fonts, or spacing from the inspiration — adapt everything to the project's design tokens from `globals.css`
 - Rewrite the HTML to use existing shadcn/ui components and section components from `src/components/sections/`
 - If no existing section component fits, create a new one in `src/components/sections/` following the same pattern (typed props, server component by default, responsive)
@@ -149,13 +132,13 @@ The developer provides a brief, wireframe, or Figma and wants a full page built.
 
 **Rules:**
 1. Read `design-system/client-brief.md` and `design-system/patterns.md` before starting
-2. Run `python3 .claude/skills/ui-ux-pro-max/scripts/search.py` with `--domain landing` to get page structure recommendations for the page type
+2. Read the taste skill — check which DESIGN_VARIANCE / MOTION_INTENSITY / VISUAL_DENSITY fits the page type
 3. Create the route in `src/app/(site)/`
 4. Export `generateMetadata` with unique title + description
-5. Compose the page from existing section components first — only create new sections if needed
+5. Compose the page with shadcn/ui primitives — browse `examples/sections/` for reference patterns
 6. Use shadcn/ui primitives for all new components — check the ui-styling skill references if unsure which component fits
 7. Follow the SITE conversion pattern from `design-system/patterns.md` (Hook → Value → Proof → CTA)
-8. Validate against ui-ux-pro-max Quick Reference §1-§5 (accessibility, touch, performance, style, layout)
+8. Run the taste skill's Pre-Flight Check (Section 9) before delivering
 9. Test at 375px, 768px, 1440px mentally (or flag if unsure about responsive behavior)
 10. Add the page to `sitemap.ts` static pages array
 
@@ -164,8 +147,8 @@ The developer runs Lighthouse, checks accessibility, fixes responsive issues.
 
 **Rules:**
 - Follow `design-system/checklist.md` item by item
-- Run ui-ux-pro-max Quick Reference §1-§3 (Accessibility, Touch, Performance) as a validation pass
-- Run `--domain ux "animation accessibility loading"` for any UX concern
+- Run the taste skill's Pre-Flight Check (Section 9) as a validation pass
+- Check taste skill Section 5 (Performance Guardrails) for any performance concern
 - Fix issues in order of impact: performance > accessibility > SEO > cosmetic
 - Do not refactor working code while fixing issues — separate concerns
 - Report each fix individually so the developer can track progress
@@ -176,8 +159,8 @@ The developer runs Lighthouse, checks accessibility, fixes responsive issues.
 1. Edit `client.config.ts` with client details (name, colors, pages, features)
 2. Run `pnpm setup` to apply configuration across the project
 3. Fill `design-system/client-brief.md` with brand context
-4. Run ui-ux-pro-max `--design-system` to generate design direction from the brief
-5. Map recommendations to tokens in `globals.css` and record decisions in `design-system/decisions.md`
+4. Read the taste skill and apply design direction based on the brief
+5. Record design decisions in `design-system/decisions.md`
 6. Run `pnpm dev` and start building
 
 ### From existing site (redesign)
