@@ -6,6 +6,7 @@ You are building a website for [CLIENT_NAME]. Read the design system files befor
 ## Architecture
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS 4 + pnpm
 - UI primitives: shadcn/ui (src/components/ui/) — do NOT create duplicates
+- Design intelligence: ui-ux-pro-max skill (.claude/skills/ui-ux-pro-max/) — ALWAYS consult before building UI
 - Custom components: src/components/{layout,sections,engine,shared}/
 - Animations: GSAP (client-only, use-gsap hook, respect prefers-reduced-motion)
 - CMS: Content layer abstraction (src/lib/content/) — toggle via CONTENT_PROVIDER env
@@ -33,6 +34,40 @@ You are building a website for [CLIENT_NAME]. Read the design system files befor
 - params and searchParams are Promises in Next.js 15+ — always await
 - 1-3 tasks at a time. Show result before continuing.
 
+## Design Intelligence — ui-ux-pro-max + shadcn/ui
+
+BEFORE building any UI (new page, new section, new component), follow this process:
+
+### Step 1: Consult the skill for design direction
+Run the design system search to get style, palette, typography, and UX recommendations:
+```bash
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<client_industry> <site_type> <keywords>" --design-system -p "<client_name>"
+```
+Example: `python3 .claude/skills/ui-ux-pro-max/scripts/search.py "creative agency portfolio premium" --design-system -p "Basanto"`
+
+### Step 2: Map recommendations to project tokens
+The skill returns style, colors, typography, effects. Map them to:
+- Colors → CSS variables in `globals.css` (--primary, --cta, etc.)
+- Typography → `headingFont` in `client.config.ts` + body font in `layout.tsx`
+- Spacing/radius → `--radius`, `--spacing-section` in `globals.css`
+- Style direction → record in `design-system/decisions.md`
+
+### Step 3: Build with shadcn/ui primitives
+Compose UI using existing shadcn components (Button, Card, Badge, Separator, Accordion, etc.).
+The skill provides the "what" (style, colors, patterns) — shadcn provides the "how" (accessible components).
+
+### Step 4: Validate against skill rules
+Before delivering, check Quick Reference §1-§3 (Accessibility, Touch & Interaction, Performance) from the skill.
+
+### When to search specific domains
+| Need | Command |
+|------|---------|
+| Style options | `--domain style "glassmorphism editorial"` |
+| Color palettes | `--domain color "agency premium dark"` |
+| Font pairings | `--domain typography "elegant modern"` |
+| UX best practices | `--domain ux "animation scroll loading"` |
+| Landing structure | `--domain landing "hero social-proof cta"` |
+
 ## File Structure
 src/app/(site)/ — all pages with shared nav+footer layout
 src/app/api/ — API routes (outside site layout)
@@ -56,6 +91,7 @@ The developer sends a screenshot + HTML/CSS from another site to adapt for the c
 
 **Rules:**
 - Always read `design-system/client-brief.md` first to understand the client's visual identity
+- Run `--domain style` or `--domain landing` from ui-ux-pro-max if unsure which pattern fits best
 - NEVER copy colors, fonts, or spacing from the inspiration — adapt everything to the project's design tokens from `globals.css`
 - Rewrite the HTML to use existing shadcn/ui components and section components from `src/components/sections/`
 - If no existing section component fits, create a new one in `src/components/sections/` following the same pattern (typed props, server component by default, responsive)
@@ -86,18 +122,23 @@ The developer provides a brief, wireframe, or Figma and wants a full page built.
 
 **Rules:**
 1. Read `design-system/client-brief.md` and `design-system/patterns.md` before starting
-2. Create the route in `src/app/(site)/`
-3. Export `generateMetadata` with unique title + description
-4. Compose the page from existing section components first — only create new sections if needed
-5. Follow the SITE conversion pattern from `design-system/patterns.md` (Hook → Value → Proof → CTA)
-6. Test at 375px, 768px, 1440px mentally (or flag if unsure about responsive behavior)
-7. Add the page to `sitemap.ts` static pages array
+2. Run `python3 .claude/skills/ui-ux-pro-max/scripts/search.py` with `--domain landing` to get page structure recommendations for the page type
+3. Create the route in `src/app/(site)/`
+4. Export `generateMetadata` with unique title + description
+5. Compose the page from existing section components first — only create new sections if needed
+6. Use shadcn/ui primitives for all new components — check the ui-styling skill references if unsure which component fits
+7. Follow the SITE conversion pattern from `design-system/patterns.md` (Hook → Value → Proof → CTA)
+8. Validate against ui-ux-pro-max Quick Reference §1-§5 (accessibility, touch, performance, style, layout)
+9. Test at 375px, 768px, 1440px mentally (or flag if unsure about responsive behavior)
+10. Add the page to `sitemap.ts` static pages array
 
 ### 5. Pre-Launch Polish
 The developer runs Lighthouse, checks accessibility, fixes responsive issues.
 
 **Rules:**
 - Follow `design-system/checklist.md` item by item
+- Run ui-ux-pro-max Quick Reference §1-§3 (Accessibility, Touch, Performance) as a validation pass
+- Run `--domain ux "animation accessibility loading"` for any UX concern
 - Fix issues in order of impact: performance > accessibility > SEO > cosmetic
 - Do not refactor working code while fixing issues — separate concerns
 - Report each fix individually so the developer can track progress
@@ -108,7 +149,9 @@ The developer runs Lighthouse, checks accessibility, fixes responsive issues.
 1. Edit `client.config.ts` with client details (name, colors, pages, features)
 2. Run `pnpm setup` to apply configuration across the project
 3. Fill `design-system/client-brief.md` with brand context
-4. Run `pnpm dev` and start building
+4. Run ui-ux-pro-max `--design-system` to generate design direction from the brief
+5. Map recommendations to tokens in `globals.css` and record decisions in `design-system/decisions.md`
+6. Run `pnpm dev` and start building
 
 ### Re-configuration
 Edit `client.config.ts` and run `pnpm setup` again — it's idempotent.

@@ -101,6 +101,382 @@ function replaceInFile(relativePath: string, replacements: [string | RegExp, str
 }
 
 // =============================================================================
+// Home page templates by siteType
+// =============================================================================
+function generateHomePage(
+  siteType: string,
+  pages: Record<string, boolean>,
+): string {
+  const templates: Record<string, () => string> = {
+    portfolio: () => homePortfolio(pages),
+    marketing: () => homeMarketing(pages),
+    corporate: () => homeCorporate(pages),
+    saas: () => homeSaas(pages),
+    landing: () => homeLanding(pages),
+    engine: () => homeMarketing(pages), // engine uses marketing layout
+  };
+  const generator = templates[siteType] ?? templates.marketing;
+  return generator();
+}
+
+function homePortfolio(pages: Record<string, boolean>): string {
+  const imports = [
+    `import type { Metadata } from "next";`,
+    `import { createMetadata, siteConfig } from "@/lib/metadata";`,
+    `import { HeroCentered } from "@/components/sections/hero";`,
+  ];
+  const sections: string[] = [];
+
+  // Hero
+  sections.push(`      <HeroCentered
+        heading="[TODO: Studio tagline]"
+        subheading="[TODO: One-liner about what you do and for whom]"
+        primaryCta={{ label: "[TODO: CTA label]", href: "${pages.portfolio ? "/portfolio" : "/contact"}" }}
+        secondaryCta={{ label: "[TODO: Secondary CTA]", href: "${pages.contact ? "/contact" : "/about"}" }}
+        fullHeight
+      />`);
+
+  // Portfolio grid
+  if (pages.portfolio) {
+    imports.push(`import { PortfolioGrid } from "@/components/sections/portfolio";`);
+    sections.push(`      <PortfolioGrid
+        heading="Selected Work"
+        projects={[
+          // TODO: Replace with real projects or fetch from content provider
+          // { title: "Project Name", slug: "project", client: "Client", category: "Web", description: "...", mainImage: { src: "/placeholder.svg", alt: "..." }, featured: true, completedAt: "2024" },
+        ]}
+        columns={2}
+      />`);
+  }
+
+  // Testimonials
+  imports.push(`import { TestimonialsGrid } from "@/components/sections/social-proof";`);
+  sections.push(`      <TestimonialsGrid
+        heading="What Clients Say"
+        testimonials={[
+          // TODO: Replace with real testimonials or fetch from content provider
+          // { name: "Client Name", role: "CEO", company: "Company", quote: "...", featured: true },
+        ]}
+        columns={2}
+      />`);
+
+  // CTA
+  imports.push(`import { CtaCentered } from "@/components/sections/cta";`);
+  sections.push(`      <CtaCentered
+        heading="[TODO: Have a project in mind?]"
+        description="[TODO: Short invitation to collaborate]"
+        primaryCta={{ label: "[TODO: Start a project]", href: "${pages.contact ? "/contact" : "#"}" }}
+      />`);
+
+  return buildPage(imports, sections);
+}
+
+function homeMarketing(pages: Record<string, boolean>): string {
+  const imports = [
+    `import type { Metadata } from "next";`,
+    `import { createMetadata, siteConfig } from "@/lib/metadata";`,
+    `import { HeroCentered } from "@/components/sections/hero";`,
+    `import { LogoCloud } from "@/components/sections/social-proof";`,
+  ];
+  const sections: string[] = [];
+
+  // Hero
+  sections.push(`      <HeroCentered
+        heading="[TODO: Main value proposition]"
+        subheading="[TODO: Supporting statement — what you do, who it's for, why it matters]"
+        primaryCta={{ label: "[TODO: Primary CTA]", href: "${pages.contact ? "/contact" : "#"}" }}
+        secondaryCta={{ label: "[TODO: Secondary CTA]", href: "${pages.services ? "/services" : "/about"}" }}
+      />`);
+
+  // Logo cloud
+  sections.push(`      <LogoCloud
+        heading="[TODO: Trusted by industry leaders]"
+        logos={[
+          // TODO: Add client/partner logos
+          // { src: "/logos/company.svg", alt: "Company Name" },
+        ]}
+      />`);
+
+  // Features
+  imports.push(`import { FeaturesGrid } from "@/components/sections/features";`);
+  sections.push(`      <FeaturesGrid
+        heading="[TODO: Why choose us]"
+        subheading="[TODO: Brief intro to your key differentiators]"
+        features={[
+          // TODO: Replace with real features/services
+          { icon: "Zap", title: "[Feature 1]", description: "[TODO: Description]" },
+          { icon: "Shield", title: "[Feature 2]", description: "[TODO: Description]" },
+          { icon: "BarChart3", title: "[Feature 3]", description: "[TODO: Description]" },
+        ]}
+        columns={3}
+      />`);
+
+  // Testimonials
+  imports.push(`import { TestimonialsGrid } from "@/components/sections/social-proof";`);
+  sections.push(`      <TestimonialsGrid
+        heading="What Our Clients Say"
+        testimonials={[
+          // TODO: Replace with real testimonials or fetch from content provider
+          // { name: "Client Name", role: "CEO", company: "Company", quote: "...", featured: true },
+        ]}
+      />`);
+
+  // CTA
+  imports.push(`import { CtaCentered } from "@/components/sections/cta";`);
+  sections.push(`      <CtaCentered
+        heading="[TODO: Ready to get started?]"
+        description="[TODO: Short persuasive closing statement]"
+        primaryCta={{ label: "[TODO: Get started]", href: "${pages.contact ? "/contact" : "#"}" }}
+        secondaryCta={{ label: "[TODO: Learn more]", href: "${pages.about ? "/about" : "/services"}" }}
+        variant="gradient"
+      />`);
+
+  return buildPage(imports, sections);
+}
+
+function homeCorporate(pages: Record<string, boolean>): string {
+  const imports = [
+    `import type { Metadata } from "next";`,
+    `import { createMetadata, siteConfig } from "@/lib/metadata";`,
+    `import { HeroSplit } from "@/components/sections/hero";`,
+  ];
+  const sections: string[] = [];
+
+  // Hero split
+  sections.push(`      <HeroSplit
+        heading="[TODO: Corporate headline]"
+        subheading="[TODO: Company mission or value proposition]"
+        primaryCta={{ label: "[TODO: Primary CTA]", href: "${pages.contact ? "/contact" : "#"}" }}
+        secondaryCta={{ label: "[TODO: About us]", href: "${pages.about ? "/about" : "#"}" }}
+        image={{ src: "/placeholder.svg", alt: "[TODO: Hero image alt text]", width: 800, height: 600 }}
+      />`);
+
+  // Features
+  imports.push(`import { FeaturesGrid } from "@/components/sections/features";`);
+  sections.push(`      <FeaturesGrid
+        heading="[TODO: Our expertise]"
+        subheading="[TODO: What sets us apart]"
+        features={[
+          // TODO: Replace with real services/strengths
+          { icon: "Building2", title: "[Strength 1]", description: "[TODO: Description]" },
+          { icon: "Users", title: "[Strength 2]", description: "[TODO: Description]" },
+          { icon: "Target", title: "[Strength 3]", description: "[TODO: Description]" },
+          { icon: "Award", title: "[Strength 4]", description: "[TODO: Description]" },
+        ]}
+        columns={4}
+      />`);
+
+  // Testimonials
+  imports.push(`import { TestimonialsGrid } from "@/components/sections/social-proof";`);
+  sections.push(`      <TestimonialsGrid
+        heading="Client Success Stories"
+        testimonials={[
+          // TODO: Replace with real testimonials or fetch from content provider
+          // { name: "Client Name", role: "CEO", company: "Company", quote: "...", featured: true },
+        ]}
+        columns={2}
+      />`);
+
+  // Team
+  if (pages.team) {
+    imports.push(`import { TeamGrid } from "@/components/sections/team";`);
+    sections.push(`      <TeamGrid
+        heading="Our Leadership"
+        members={[
+          // TODO: Replace with real team members or fetch from content provider
+          // { name: "Name", role: "Role", image: { src: "/placeholder.svg", alt: "..." }, order: 1 },
+        ]}
+        columns={4}
+      />`);
+  }
+
+  // CTA
+  imports.push(`import { CtaCentered } from "@/components/sections/cta";`);
+  sections.push(`      <CtaCentered
+        heading="[TODO: Let's work together]"
+        description="[TODO: Professional closing statement]"
+        primaryCta={{ label: "[TODO: Contact us]", href: "${pages.contact ? "/contact" : "#"}" }}
+      />`);
+
+  return buildPage(imports, sections);
+}
+
+function homeSaas(pages: Record<string, boolean>): string {
+  const imports = [
+    `import type { Metadata } from "next";`,
+    `import { createMetadata, siteConfig } from "@/lib/metadata";`,
+    `import { HeroCentered } from "@/components/sections/hero";`,
+    `import { LogoCloud } from "@/components/sections/social-proof";`,
+  ];
+  const sections: string[] = [];
+
+  // Hero
+  sections.push(`      <HeroCentered
+        heading="[TODO: Product headline — what it does]"
+        subheading="[TODO: Who it's for and the key benefit]"
+        primaryCta={{ label: "[TODO: Start free trial]", href: "#" }}
+        secondaryCta={{ label: "[TODO: See demo]", href: "#" }}
+        badge="[TODO: Launch badge or social proof]"
+      />`);
+
+  // Logo cloud
+  sections.push(`      <LogoCloud
+        heading="[TODO: Trusted by 1,000+ teams]"
+        logos={[
+          // TODO: Add customer logos
+          // { src: "/logos/company.svg", alt: "Company Name" },
+        ]}
+      />`);
+
+  // Features
+  imports.push(`import { FeaturesGrid } from "@/components/sections/features";`);
+  sections.push(`      <FeaturesGrid
+        heading="[TODO: Everything you need]"
+        subheading="[TODO: Platform capabilities overview]"
+        features={[
+          // TODO: Replace with real product features
+          { icon: "Zap", title: "[Feature 1]", description: "[TODO: Description]" },
+          { icon: "Lock", title: "[Feature 2]", description: "[TODO: Description]" },
+          { icon: "BarChart3", title: "[Feature 3]", description: "[TODO: Description]" },
+          { icon: "Globe", title: "[Feature 4]", description: "[TODO: Description]" },
+          { icon: "Layers", title: "[Feature 5]", description: "[TODO: Description]" },
+          { icon: "RefreshCw", title: "[Feature 6]", description: "[TODO: Description]" },
+        ]}
+        columns={3}
+      />`);
+
+  // Pricing
+  if (pages.pricing) {
+    imports.push(`import { PricingCards } from "@/components/sections/pricing";`);
+    sections.push(`      <PricingCards
+        plans={[
+          // TODO: Replace with real pricing plans
+          {
+            name: "Starter",
+            price: "[TODO]",
+            period: "month",
+            description: "[TODO: Who this plan is for]",
+            features: ["[Feature 1]", "[Feature 2]", "[Feature 3]"],
+            cta: { label: "Get started", href: "#" },
+          },
+          {
+            name: "Pro",
+            price: "[TODO]",
+            period: "month",
+            description: "[TODO: Who this plan is for]",
+            features: ["[Feature 1]", "[Feature 2]", "[Feature 3]", "[Feature 4]"],
+            cta: { label: "Get started", href: "#" },
+            popular: true,
+          },
+          {
+            name: "Enterprise",
+            price: "[TODO]",
+            period: "month",
+            description: "[TODO: Who this plan is for]",
+            features: ["[Feature 1]", "[Feature 2]", "[Feature 3]", "[Feature 4]", "[Feature 5]"],
+            cta: { label: "Contact sales", href: "${pages.contact ? "/contact" : "#"}" },
+          },
+        ]}
+      />`);
+  }
+
+  // FAQ
+  imports.push(`import { FaqSection } from "@/components/sections/faq";`);
+  sections.push(`      <FaqSection
+        heading="Frequently Asked Questions"
+        faqs={[
+          // TODO: Replace with real FAQs or fetch from content provider
+          { question: "[TODO: Question 1]", answer: "[TODO: Answer 1]", order: 1 },
+          { question: "[TODO: Question 2]", answer: "[TODO: Answer 2]", order: 2 },
+          { question: "[TODO: Question 3]", answer: "[TODO: Answer 3]", order: 3 },
+        ]}
+      />`);
+
+  // CTA
+  imports.push(`import { CtaCentered } from "@/components/sections/cta";`);
+  sections.push(`      <CtaCentered
+        heading="[TODO: Ready to scale?]"
+        description="[TODO: Free trial / demo invitation]"
+        primaryCta={{ label: "[TODO: Start free trial]", href: "#" }}
+        secondaryCta={{ label: "[TODO: Talk to sales]", href: "${pages.contact ? "/contact" : "#"}" }}
+        variant="gradient"
+      />`);
+
+  return buildPage(imports, sections);
+}
+
+function homeLanding(pages: Record<string, boolean>): string {
+  const imports = [
+    `import type { Metadata } from "next";`,
+    `import { createMetadata, siteConfig } from "@/lib/metadata";`,
+    `import { HeroCentered } from "@/components/sections/hero";`,
+  ];
+  const sections: string[] = [];
+
+  // Hero — full height, single focus
+  sections.push(`      <HeroCentered
+        heading="[TODO: Bold headline — one big promise]"
+        subheading="[TODO: Supporting proof or stat]"
+        primaryCta={{ label: "[TODO: Single CTA]", href: "${pages.contact ? "/contact" : "#"}" }}
+        fullHeight
+      />`);
+
+  // Features
+  imports.push(`import { FeaturesGrid } from "@/components/sections/features";`);
+  sections.push(`      <FeaturesGrid
+        heading="[TODO: How it works / Key benefits]"
+        features={[
+          // TODO: Replace with real benefits
+          { icon: "CheckCircle", title: "[Benefit 1]", description: "[TODO: Description]" },
+          { icon: "CheckCircle", title: "[Benefit 2]", description: "[TODO: Description]" },
+          { icon: "CheckCircle", title: "[Benefit 3]", description: "[TODO: Description]" },
+        ]}
+        columns={3}
+      />`);
+
+  // Testimonials
+  imports.push(`import { TestimonialsGrid } from "@/components/sections/social-proof";`);
+  sections.push(`      <TestimonialsGrid
+        heading="What People Are Saying"
+        testimonials={[
+          // TODO: Replace with real testimonials
+          // { name: "Name", role: "Role", company: "Company", quote: "...", featured: true },
+        ]}
+        columns={2}
+      />`);
+
+  // CTA — dark variant for urgency
+  imports.push(`import { CtaCentered } from "@/components/sections/cta";`);
+  sections.push(`      <CtaCentered
+        heading="[TODO: Don't miss out — final CTA]"
+        description="[TODO: Urgency or scarcity statement]"
+        primaryCta={{ label: "[TODO: CTA label]", href: "${pages.contact ? "/contact" : "#"}" }}
+        variant="dark"
+      />`);
+
+  return buildPage(imports, sections);
+}
+
+function buildPage(imports: string[], sections: string[]): string {
+  return `${imports.join("\n")}
+
+export const metadata: Metadata = createMetadata({
+  title: \`\${siteConfig.name} — \${siteConfig.description}\`,
+  description: siteConfig.description,
+  path: "/",
+});
+
+export default function HomePage() {
+  return (
+    <main>
+${sections.join("\n\n")}
+    </main>
+  );
+}
+`;
+}
+
+// =============================================================================
 // Main
 // =============================================================================
 async function main() {
@@ -454,6 +830,11 @@ async function main() {
     console.log("    src/lib/sanity/client.ts");
     console.log("    src/lib/sanity/image.ts");
   }
+
+  // --- 9. Generate starter home page based on siteType ---
+  console.log("🏠 Generating home page for siteType:", config.siteType, "...");
+  const homePage = generateHomePage(config.siteType, config.pages);
+  writeFile("src/app/(site)/page.tsx", homePage);
 
   console.log("");
   console.log("✅ Setup complete!");

@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { createMetadata, siteConfig } from "@/lib/metadata";
-import { Button } from "@/components/ui/button";
+import { HeroCentered } from "@/components/sections/hero";
+import { LogoCloud } from "@/components/sections/social-proof";
+import { FeaturesGrid } from "@/components/sections/features";
+import { TestimonialsGrid } from "@/components/sections/social-proof";
+import { CtaCentered } from "@/components/sections/cta";
 
 export const metadata: Metadata = createMetadata({
   title: `${siteConfig.name} — ${siteConfig.description}`,
@@ -10,17 +14,49 @@ export const metadata: Metadata = createMetadata({
 
 export default function HomePage() {
   return (
-    <section className="flex min-h-[80vh] flex-col items-center justify-center gap-6 px-4 text-center">
-      <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
-        {siteConfig.name}
-      </h1>
-      <p className="max-w-2xl text-lg text-muted-foreground">
-        {siteConfig.description}
-      </p>
-      <div className="flex gap-4">
-        <Button size="lg">Get Started</Button>
-        <Button variant="outline" size="lg">Learn More</Button>
-      </div>
-    </section>
+    <main>
+      <HeroCentered
+        heading="[TODO: Main value proposition]"
+        subheading="[TODO: Supporting statement — what you do, who it's for, why it matters]"
+        primaryCta={{ label: "[TODO: Primary CTA]", href: "/contact" }}
+        secondaryCta={{ label: "[TODO: Secondary CTA]", href: "/services" }}
+      />
+
+      <LogoCloud
+        heading="[TODO: Trusted by industry leaders]"
+        logos={[
+          // TODO: Add client/partner logos
+          // { src: "/logos/company.svg", alt: "Company Name" },
+        ]}
+      />
+
+      <FeaturesGrid
+        heading="[TODO: Why choose us]"
+        subheading="[TODO: Brief intro to your key differentiators]"
+        features={[
+          // TODO: Replace with real features/services
+          { icon: "Zap", title: "[Feature 1]", description: "[TODO: Description]" },
+          { icon: "Shield", title: "[Feature 2]", description: "[TODO: Description]" },
+          { icon: "BarChart3", title: "[Feature 3]", description: "[TODO: Description]" },
+        ]}
+        columns={3}
+      />
+
+      <TestimonialsGrid
+        heading="What Our Clients Say"
+        testimonials={[
+          // TODO: Replace with real testimonials or fetch from content provider
+          // { name: "Client Name", role: "CEO", company: "Company", quote: "...", featured: true },
+        ]}
+      />
+
+      <CtaCentered
+        heading="[TODO: Ready to get started?]"
+        description="[TODO: Short persuasive closing statement]"
+        primaryCta={{ label: "[TODO: Get started]", href: "/contact" }}
+        secondaryCta={{ label: "[TODO: Learn more]", href: "/about" }}
+        variant="gradient"
+      />
+    </main>
   );
 }

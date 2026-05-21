@@ -80,7 +80,18 @@
   /* --- Spacing: section-level --- */
   --spacing-section: 5rem;
   --spacing-section-lg: 7rem;
+
+  /* --- Animations: marquee --- */
+  --animate-marquee: marquee linear infinite;
 }
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 
 :root {
   --background: oklch(1 0 0);
@@ -168,5 +179,11 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation-play-state: paused !important;
   }
 }
