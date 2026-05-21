@@ -67,7 +67,8 @@
   --font-mono: var(--font-geist-mono);
   /* TODO: Set headingFont in client.config.ts and run pnpm setup */
   --font-heading: var(--font-sans);
-  --font-serif: "Georgia", "Times New Roman", serif;
+  /* TODO: Set serifFont in client.config.ts and run pnpm setup */
+  --font-serif: var(--font-serif, serif);
 
   /* --- Typography: fluid sizes --- */
   --text-display: clamp(2.5rem, 5vw + 1rem, 4.5rem);

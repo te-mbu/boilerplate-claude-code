@@ -14,10 +14,10 @@ const config: ClientConfig = {
   url: "https://example.com",
   tagline: "Your tagline here",
 
-  // --- Heading font (Google Fonts name, e.g. "Fraunces", "Playfair Display") ---
-  // Leave empty to use the same font as body text.
-  // Run `pnpm setup` after changing — it updates layout.tsx and globals.css.
-  headingFont: "",
+  // --- Fonts (Google Fonts names, e.g. "Fraunces", "Playfair Display") ---
+  // Leave empty to use defaults. Run `pnpm setup` after changing.
+  headingFont: "", // Display/heading font — applied to h1–h6 via font-heading
+  serifFont: "",   // Serif font — available as font-serif for editorial accents, body text, etc.
 
   // --- Locale & CMS ---
   locale: "fr", // "fr" | "en" | "fr+en"

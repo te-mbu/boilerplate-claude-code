@@ -5,6 +5,7 @@ export interface ClientConfig {
   tagline: string;
 
   headingFont: string;
+  serifFont: string;
   locale: "fr" | "en" | "fr+en";
   cms: "sanity" | "static";
   siteType: "landing" | "marketing" | "corporate" | "portfolio" | "saas" | "engine";

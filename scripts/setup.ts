@@ -568,6 +568,55 @@ async function main() {
     ]);
   }
 
+  // --- 7b2. Configure serif font ---
+  if (config.serifFont && fileExists("src/app/layout.tsx")) {
+    console.log(`🔤 Configuring serif font: ${config.serifFont}...`);
+
+    const fontImportName = config.serifFont.replace(/\s+/g, "_");
+    const fontVarName = `--font-serif-google`;
+
+    let layoutContent = readFile("src/app/layout.tsx");
+
+    if (!layoutContent.includes(fontImportName)) {
+      // Add import
+      const importRegex = /import { ([^}]+) } from "next\/font\/google";/;
+      const match = layoutContent.match(importRegex);
+      if (match) {
+        layoutContent = layoutContent.replace(
+          importRegex,
+          `import { ${match[1]}, ${fontImportName} } from "next/font/google";`
+        );
+      }
+
+      // Add font instance after last font declaration
+      const lastFontDecl = layoutContent.match(/const \w+ = \w+\(\{[^}]+\}\);(?![\s\S]*const \w+ = \w+\(\{)/);
+      if (lastFontDecl) {
+        layoutContent = layoutContent.replace(
+          lastFontDecl[0],
+          `${lastFontDecl[0]}\n\nconst serifFont = ${fontImportName}({\n  variable: "${fontVarName}",\n  subsets: ["latin"],\n});`
+        );
+      }
+
+      // Add font variable to html className
+      const classNameMatch = layoutContent.match(/\$\{geistSans\.variable\} \$\{geistMono\.variable\}([^`]*)/);
+      if (classNameMatch) {
+        const existing = classNameMatch[0];
+        if (!existing.includes("serifFont")) {
+          layoutContent = layoutContent.replace(
+            /(\$\{geistMono\.variable\})/,
+            `$1 \${serifFont.variable}`
+          );
+        }
+      }
+    }
+
+    writeFile("src/app/layout.tsx", layoutContent);
+
+    replaceInFile("src/app/globals.css", [
+      [/--font-serif: var\([^)]+\);/, `--font-serif: var(${fontVarName});`],
+    ]);
+  }
+
   // --- 7c. Update sitemap with enabled pages only ---
   console.log("🗺️  Updating sitemap...");
   if (fileExists("src/app/sitemap.ts")) {
