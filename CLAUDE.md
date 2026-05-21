@@ -118,6 +118,6 @@ Edit `client.config.ts` and run `pnpm setup` again — it's idempotent.
 ./scripts/create-client.sh "Client Name" client-slug
 ```
 
-## Site Type: [landing | marketing | corporate | portfolio | saas | bilingual | engine]
-## Locale: [fr | en | fr+en]
-## CMS: [sanity | static]
+## Site Type: marketing
+## Locale: fr
+## CMS: static

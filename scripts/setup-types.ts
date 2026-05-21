@@ -4,6 +4,7 @@ export interface ClientConfig {
   url: string;
   tagline: string;
 
+  headingFont: string;
   locale: "fr" | "en" | "fr+en";
   cms: "sanity" | "static";
   siteType: "landing" | "marketing" | "corporate" | "portfolio" | "saas" | "engine";
@@ -37,6 +38,7 @@ export interface ClientConfig {
     cookieConsent: boolean;
     chatbot: boolean;
     diagnostic: boolean;
+    smoothScroll: boolean;
     i18n: boolean;
     analytics: boolean;
   };

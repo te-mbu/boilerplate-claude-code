@@ -26,7 +26,6 @@ export function ContactForm({ heading, description }: ContactFormProps) {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormData>({
-    // @ts-expect-error -- zod v4 type mismatch with @hookform/resolvers; works at runtime
     resolver: zodResolver(contactSchema),
   });
 

@@ -14,6 +14,11 @@ const config: ClientConfig = {
   url: "https://example.com",
   tagline: "Your tagline here",
 
+  // --- Heading font (Google Fonts name, e.g. "Fraunces", "Playfair Display") ---
+  // Leave empty to use the same font as body text.
+  // Run `pnpm setup` after changing — it updates layout.tsx and globals.css.
+  headingFont: "",
+
   // --- Locale & CMS ---
   locale: "fr", // "fr" | "en" | "fr+en"
   cms: "static", // "sanity" | "static"
@@ -52,6 +57,7 @@ const config: ClientConfig = {
     cookieConsent: true,
     chatbot: false,
     diagnostic: false,
+    smoothScroll: true, // Lenis smooth scroll + GSAP sync
     i18n: false, // set to true if locale is "fr+en"
     analytics: true, // GTM
   },

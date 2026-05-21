@@ -1,20 +1,20 @@
 "use client";
 
-import { useRef, useLayoutEffect, useCallback } from "react";
-import { gsap } from "@/lib/animations/gsap-config";
+import { useRef, useEffect, useCallback, useMemo } from "react";
+import { getGsap } from "@/lib/animations/gsap-config";
 
 export function useGsap<T extends HTMLElement = HTMLDivElement>() {
   const ref = useRef<T>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
 
-  const prefersReducedMotion =
-    typeof window !== "undefined"
-      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      : false;
+  // Memoize reduced motion check — stable across renders
+  const prefersReducedMotion = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     return () => {
-      // Cleanup on unmount
       tl.current?.kill();
     };
   }, []);
@@ -29,8 +29,18 @@ export function useGsap<T extends HTMLElement = HTMLDivElement>() {
     ) => {
       if (prefersReducedMotion || !ref.current) return;
 
-      tl.current = gsap.timeline();
-      callback({ ref: ref.current, gsap, timeline: tl.current });
+      const element = ref.current;
+      getGsap().then(({ gsap: g }) => {
+        // Guard: component may have unmounted while GSAP was loading
+        if (!element.isConnected) return;
+
+        tl.current = g.timeline();
+        callback({
+          ref: element,
+          gsap: g,
+          timeline: tl.current,
+        });
+      });
     },
     [prefersReducedMotion]
   );

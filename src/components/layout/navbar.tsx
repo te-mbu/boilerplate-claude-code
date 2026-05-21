@@ -1,12 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { NavbarMobile } from "@/components/layout/navbar-mobile";
 import { cn } from "@/lib/utils";
 import type { NavItem } from "@/types/navigation";
+
+// Lazy-load mobile drawer — desktop users never download this chunk
+const NavbarMobile = lazy(() =>
+  import("@/components/layout/navbar-mobile").then((m) => ({ default: m.NavbarMobile }))
+);
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Services", href: "/services" },
@@ -29,12 +33,16 @@ export function Navbar({
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  const handleScroll = useCallback(() => {
+    const isScrolled = window.scrollY > 16;
+    setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
+  }, []);
+
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 16);
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [handleScroll]);
 
   const isTransparent = variant === "transparent" && !scrolled;
 
@@ -94,11 +102,15 @@ export function Navbar({
         </div>
       </div>
 
-      <NavbarMobile
-        items={items}
-        open={mobileOpen}
-        onOpenChange={setMobileOpen}
-      />
+      {mobileOpen && (
+        <Suspense fallback={null}>
+          <NavbarMobile
+            items={items}
+            open={mobileOpen}
+            onOpenChange={setMobileOpen}
+          />
+        </Suspense>
+      )}
     </header>
   );
 }

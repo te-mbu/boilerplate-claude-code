@@ -133,10 +133,16 @@ async function main() {
     ['"[CLIENT_NAME]"', `"${config.name}"`],
     [`"[CLIENT_NAME]"`, `"${config.name}"`],
   ]);
-  replaceInFile("src/components/layout/footer.tsx", [
-    ['"[CLIENT_NAME]"', `"${config.name}"`],
-    [`"[CLIENT_NAME]"`, `"${config.name}"`],
-  ]);
+  for (const footerFile of [
+    "src/components/layout/footer.tsx",
+    "src/components/layout/footer-marketing.tsx",
+    "src/components/layout/footer-minimal.tsx",
+  ]) {
+    replaceInFile(footerFile, [
+      ['"[CLIENT_NAME]"', `"${config.name}"`],
+      [`"[CLIENT_NAME]"`, `"${config.name}"`],
+    ]);
+  }
 
   // --- 2. Update package.json ---
   console.log("📦 Updating package.json...");
@@ -210,7 +216,163 @@ async function main() {
     }
   }
 
-  // --- 6. Update theme tokens in globals.css ---
+  // --- 5a. Select footer template based on siteType ---
+  console.log("🦶 Selecting footer template based on siteType...");
+  const minimalFooterTypes = ["portfolio", "corporate", "landing"];
+  const footerTemplate = minimalFooterTypes.includes(config.siteType)
+    ? "src/components/layout/footer-minimal.tsx"
+    : "src/components/layout/footer-marketing.tsx";
+  if (fileExists(footerTemplate)) {
+    const templateContent = readFile(footerTemplate);
+    writeFile("src/components/layout/footer.tsx", templateContent);
+    console.log(`  📋 Copied ${footerTemplate} → footer.tsx`);
+  }
+
+  // --- 5b. Update navbar links — remove disabled pages ---
+  console.log("🧭 Updating navbar links...");
+  const navPageHrefMap: Record<string, string> = {
+    services: "/services",
+    portfolio: "/portfolio",
+    blog: "/blog",
+    about: "/about",
+  };
+
+  if (fileExists("src/components/layout/navbar.tsx")) {
+    let navContent = readFile("src/components/layout/navbar.tsx");
+    for (const [page, href] of Object.entries(navPageHrefMap)) {
+      if (!config.pages[page as keyof typeof config.pages]) {
+        // Remove the NavItem line for this page
+        const lineRegex = new RegExp(`\\s*\\{[^}]*href:\\s*"${href.replace("/", "\\/")}"[^}]*\\},?\\n`, "g");
+        navContent = navContent.replace(lineRegex, "");
+        console.log(`  🗑️  Removed ${href} from navbar`);
+      }
+    }
+    writeFile("src/components/layout/navbar.tsx", navContent);
+  }
+
+  // --- 5c. Update footer links — remove disabled pages ---
+  console.log("🦶 Updating footer links...");
+  const footerHrefs: Record<string, string[]> = {
+    services: ["/services"],
+    portfolio: ["/portfolio"],
+    pricing: ["/pricing"],
+    features: ["/features"],
+    about: ["/about"],
+    team: ["/team"],
+    blog: ["/blog"],
+    contact: ["/contact"],
+    changelog: ["/changelog"],
+    engine: ["/engine/diagnostic"],
+  };
+
+  const footerFiles = [
+    "src/components/layout/footer.tsx",
+    "src/components/layout/footer-marketing.tsx",
+    "src/components/layout/footer-minimal.tsx",
+  ];
+  for (const footerFile of footerFiles) {
+    if (fileExists(footerFile)) {
+      let footerContent = readFile(footerFile);
+      for (const [page, hrefs] of Object.entries(footerHrefs)) {
+        if (!config.pages[page as keyof typeof config.pages]) {
+          for (const href of hrefs) {
+            const lineRegex = new RegExp(`\\s*\\{[^}]*href:\\s*"${href.replace("/", "\\/")}"[^}]*\\},?\\n`, "g");
+            footerContent = footerContent.replace(lineRegex, "");
+            if (footerFile === "src/components/layout/footer.tsx") {
+              console.log(`  🗑️  Removed ${href} from footer`);
+            }
+          }
+        }
+      }
+      writeFile(footerFile, footerContent);
+    }
+  }
+
+  // --- 5d. Toggle SearchAction structured data based on blog ---
+  if (fileExists("src/app/(site)/layout.tsx")) {
+    if (config.pages.blog) {
+      console.log("🔍 Enabling SearchAction structured data for blog...");
+      replaceInFile("src/app/(site)/layout.tsx", [
+        [
+          "websiteSchema()",
+          "websiteSchema({ searchUrl: `${siteConfig.url}/blog?q={search_term_string}` })",
+        ],
+      ]);
+    } else {
+      console.log("🔍 Removing SearchAction structured data (blog disabled)...");
+      replaceInFile("src/app/(site)/layout.tsx", [
+        [
+          /websiteSchema\(\{[^}]*\}\)/,
+          "websiteSchema()",
+        ],
+      ]);
+    }
+  }
+
+  // --- 5e. Disable smooth scroll if not wanted ---
+  if (!config.features?.smoothScroll) {
+    console.log("🎢 Disabling smooth scroll (Lenis)...");
+    if (fileExists("src/app/layout.tsx")) {
+      let layoutContent = readFile("src/app/layout.tsx");
+      // Remove LenisProvider import
+      layoutContent = layoutContent.replace(/import\s*\{[^}]*LenisProvider[^}]*\}\s*from\s*"[^"]*";\n?/g, "");
+      // Unwrap LenisProvider from children
+      layoutContent = layoutContent.replace(/<LenisProvider>\{children\}<\/LenisProvider>/g, "{children}");
+      writeFile("src/app/layout.tsx", layoutContent);
+    }
+    // Remove lenis CSS import
+    if (fileExists("src/app/globals.css")) {
+      let cssContent = readFile("src/app/globals.css");
+      cssContent = cssContent.replace(/@import "lenis\/dist\/lenis\.css";\n?/g, "");
+      writeFile("src/app/globals.css", cssContent);
+    }
+  }
+
+  // --- 6. Global [CLIENT_NAME] replacement in markdown files ---
+  console.log("📝 Replacing [CLIENT_NAME] in markdown files...");
+  const markdownGlob = [
+    "design-system/client-brief.md",
+    "design-system/tokens.md",
+    "design-system/components.md",
+    "design-system/patterns.md",
+    "design-system/principles.md",
+    "design-system/accessibility.md",
+    "design-system/motion.md",
+    "design-system/decisions.md",
+    "design-system/checklist.md",
+    "README.md",
+  ];
+  for (const mdFile of markdownGlob) {
+    if (fileExists(mdFile)) {
+      replaceInFile(mdFile, [["[CLIENT_NAME]", config.name]]);
+    }
+  }
+
+  // --- 6b. Enable middleware for i18n when needed ---
+  if (config.features?.i18n && config.locale === "fr+en") {
+    console.log("🌐 Enabling next-intl middleware...");
+    const middlewareContent = [
+      `import createMiddleware from "next-intl/middleware";`,
+      `import { routing } from "@/lib/i18n/navigation";`,
+      ``,
+      `export default createMiddleware(routing);`,
+      ``,
+      `export const config = {`,
+      `  matcher: ["/((?!api|_next|_vercel|.*\\\\..*).*)"],`,
+      `};`,
+      ``,
+    ].join("\n");
+    writeFile("middleware.ts", middlewareContent);
+  }
+
+  // --- 6c. Delete root src/app/page.tsx if it exists (conflicts with route group) ---
+  const rootPage = path.join(ROOT, "src/app/page.tsx");
+  if (fs.existsSync(rootPage)) {
+    fs.unlinkSync(rootPage);
+    console.log("  🗑️  Removed src/app/page.tsx (conflicts with (site) route group)");
+  }
+
+  // --- 7. Update theme tokens in globals.css ---
   console.log("🎨 Updating theme tokens...");
   if (config.theme) {
     const replacements: [RegExp, string][] = [];
@@ -240,10 +402,58 @@ async function main() {
     }
   }
 
-  // --- 7. Update sitemap with enabled pages only ---
+  // --- 7b. Configure heading font ---
+  if (config.headingFont && fileExists("src/app/layout.tsx")) {
+    console.log(`🔤 Configuring heading font: ${config.headingFont}...`);
+
+    // Convert font name to next/font/google import name (e.g. "Playfair Display" → "Playfair_Display")
+    const fontImportName = config.headingFont.replace(/\s+/g, "_");
+    const fontVarName = `--font-heading-google`;
+
+    let layoutContent = readFile("src/app/layout.tsx");
+
+    // Add font import if not already present
+    if (!layoutContent.includes(fontImportName)) {
+      // Add import alongside existing Google font imports
+      layoutContent = layoutContent.replace(
+        /import { Geist, Geist_Mono } from "next\/font\/google";/,
+        `import { Geist, Geist_Mono, ${fontImportName} } from "next/font/google";`
+      );
+
+      // Add font instance after existing font declarations
+      layoutContent = layoutContent.replace(
+        /const geistMono = Geist_Mono\(\{[^}]+\}\);/,
+        `$&\n\nconst headingFont = ${fontImportName}({\n  variable: "${fontVarName}",\n  subsets: ["latin"],\n});`
+      );
+
+      // Add font variable to html className
+      layoutContent = layoutContent.replace(
+        /\$\{geistSans\.variable\} \$\{geistMono\.variable\}/,
+        `\${geistSans.variable} \${geistMono.variable} \${headingFont.variable}`
+      );
+    }
+
+    writeFile("src/app/layout.tsx", layoutContent);
+
+    // Update globals.css to use the heading font variable
+    replaceInFile("src/app/globals.css", [
+      [/--font-heading: var\([^)]+\);/, `--font-heading: var(${fontVarName});`],
+    ]);
+  }
+
+  // --- 7c. Update sitemap with enabled pages only ---
   console.log("🗺️  Updating sitemap...");
   // Sitemap reads from content provider, static pages are hardcoded — we leave them
   // as the developer can adjust. The disabled page directories are already removed.
+
+  // --- 8. Install Sanity deps if needed ---
+  if (config.cms === "sanity") {
+    console.log("📦 Sanity CMS selected — installing dependencies...");
+    console.log("  Run: pnpm add @sanity/client @sanity/image-url");
+    console.log("  Then uncomment the real implementations in:");
+    console.log("    src/lib/sanity/client.ts");
+    console.log("    src/lib/sanity/image.ts");
+  }
 
   console.log("");
   console.log("✅ Setup complete!");
@@ -252,6 +462,7 @@ async function main() {
   console.log("  pnpm dev                    # Start dev server");
   console.log("  pnpm build                  # Verify build");
   if (config.cms === "sanity") {
+    console.log("  pnpm add @sanity/client @sanity/image-url  # Install Sanity");
     console.log("  # Add SANITY_API_TOKEN to .env.local");
   }
   console.log("");

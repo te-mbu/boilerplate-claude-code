@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 const siteConfig = {
   name: "[CLIENT_NAME]",
   url: "https://example.com",
-  description: "[CLIENT_NAME] — [tagline]",
+  description: "[CLIENT_NAME] — Your tagline here",
   ogImage: "/og-default.jpg",
   locale: "fr_FR",
 };
