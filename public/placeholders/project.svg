@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" fill="none">
+  <rect width="800" height="600" fill="#f4f4f5"/>
+  <!-- Subtle diagonal lines -->
+  <defs>
+    <pattern id="diag" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="20" stroke="#e4e4e7" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#diag)"/>
+  <!-- Image icon -->
+  <g transform="translate(362, 255)">
+    <rect x="0" y="8" width="76" height="56" rx="6" stroke="#a1a1aa" stroke-width="2" fill="none"/>
+    <circle cx="24" cy="28" r="8" stroke="#a1a1aa" stroke-width="2" fill="none"/>
+    <polyline points="8,56 28,38 44,50 56,36 68,48" stroke="#a1a1aa" stroke-width="2" fill="none" stroke-linejoin="round"/>
+  </g>
+  <!-- Label -->
+  <text x="400" y="340" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="500" fill="#a1a1aa">Project Image</text>
+  <text x="400" y="362" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#a1a1aa">800 × 600</text>
+</svg>

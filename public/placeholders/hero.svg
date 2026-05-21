@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" fill="none">
+  <rect width="1600" height="900" fill="#f4f4f5"/>
+  <!-- Subtle grid pattern -->
+  <defs>
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#e4e4e7" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <!-- Decorative circles -->
+  <circle cx="1100" cy="300" r="200" fill="#e4e4e7" opacity="0.5"/>
+  <circle cx="1200" cy="500" r="120" fill="#d4d4d8" opacity="0.4"/>
+  <!-- Label -->
+  <text x="800" y="440" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="500" fill="#a1a1aa">Hero Image</text>
+  <text x="800" y="470" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#a1a1aa">1600 × 900</text>
+</svg>

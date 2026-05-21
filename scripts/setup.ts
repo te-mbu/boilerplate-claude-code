@@ -143,7 +143,7 @@ function homePortfolio(pages: Record<string, boolean>): string {
         heading="Selected Work"
         projects={[
           // TODO: Replace with real projects or fetch from content provider
-          // { title: "Project Name", slug: "project", client: "Client", category: "Web", description: "...", mainImage: { src: "/placeholder.svg", alt: "..." }, featured: true, completedAt: "2024" },
+          // { title: "Project Name", slug: "project", client: "Client", category: "Web", description: "...", mainImage: { src: "/placeholders/project.svg", alt: "..." }, featured: true, completedAt: "2024" },
         ]}
         columns={2}
       />`);
@@ -248,7 +248,7 @@ function homeCorporate(pages: Record<string, boolean>): string {
         subheading="[TODO: Company mission or value proposition]"
         primaryCta={{ label: "[TODO: Primary CTA]", href: "${pages.contact ? "/contact" : "#"}" }}
         secondaryCta={{ label: "[TODO: About us]", href: "${pages.about ? "/about" : "#"}" }}
-        image={{ src: "/placeholder.svg", alt: "[TODO: Hero image alt text]", width: 800, height: 600 }}
+        image={{ src: "/placeholders/hero.svg", alt: "[TODO: Hero image alt text]", width: 1600, height: 900 }}
       />`);
 
   // Features
@@ -284,7 +284,7 @@ function homeCorporate(pages: Record<string, boolean>): string {
         heading="Our Leadership"
         members={[
           // TODO: Replace with real team members or fetch from content provider
-          // { name: "Name", role: "Role", image: { src: "/placeholder.svg", alt: "..." }, order: 1 },
+          // { name: "Name", role: "Role", image: { src: "/placeholders/avatar.svg", alt: "..." }, order: 1 },
         ]}
         columns={4}
       />`);

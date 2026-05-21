@@ -73,6 +73,66 @@
 - [ ] `.env` variables not exposed to client (only `NEXT_PUBLIC_*` ones)
 - [ ] API routes validate input
 
+## Design Polish — Anti-Generic AI Patterns
+
+### Typography
+- [ ] Headings use the project's heading font — not system default or Inter
+- [ ] Large headings have tight letter-spacing (`tracking-tight` or tighter)
+- [ ] Body text max-width ~65 characters for readability
+- [ ] No orphaned words on headlines (`text-wrap: balance` where supported)
+- [ ] Font weights varied for hierarchy (not just regular + bold — use medium 500, semibold 600)
+- [ ] Numbers use tabular figures where aligned (`font-variant-numeric: tabular-nums`)
+
+### Colors & Surfaces
+- [ ] No pure black backgrounds — use off-black (`#0a0a0a`, `#121212`, or tinted dark)
+- [ ] Single accent color used consistently — no competing accents
+- [ ] One consistent gray family (don't mix warm and cool grays)
+- [ ] No purple/blue AI gradient aesthetic — the most common AI fingerprint
+- [ ] Shadows are tinted to match background hue, not pure black
+- [ ] Empty sections have depth (subtle pattern, ambient gradient, or background image)
+
+### Layout
+- [ ] No "3 equal columns of cards" pattern without variation — the most generic AI layout
+- [ ] Break symmetry somewhere: offset margins, mixed aspect ratios, or asymmetric grid
+- [ ] Use `min-height: 100dvh` instead of `100vh` (mobile viewport fix)
+- [ ] Max-width containers (1200–1440px) on all content
+- [ ] Generous whitespace — when in doubt, add more
+- [ ] Buttons bottom-aligned in cards for visual consistency
+- [ ] Border-radius varied across element types (don't use the same radius everywhere)
+
+### Interactivity & States
+- [ ] All buttons have hover effect (background shift, slight scale, or translate)
+- [ ] Active/press feedback on buttons (`scale(0.98)` or `translateY(1px)`)
+- [ ] Transitions are smooth (200–300ms) — no instant state changes
+- [ ] All navigation links show active state
+- [ ] Loading states use skeleton loaders, not circular spinners
+- [ ] Empty states are designed (not blank white screens)
+- [ ] Error states have clear inline messages, not browser alerts
+- [ ] All buttons link to real destinations or are visually disabled
+
+### Content Quality
+- [ ] No placeholder names ("John Doe", "Jane Smith", "Acme Corp")
+- [ ] No fake round numbers ("99.99%", "10,000+") — use organic data ("47.2%", "8,742")
+- [ ] No AI copywriting clichés: "Elevate", "Seamless", "Unleash", "Next-Gen", "Game-changer", "Delve"
+- [ ] No exclamation marks in success messages — be calm and direct
+- [ ] Active voice throughout
+- [ ] Sentence case for headings (not Title Case everywhere)
+
+### Component Patterns
+- [ ] Cards don't have both border AND shadow — pick one
+- [ ] Button styles limited: filled + ghost/outline + text link. No more.
+- [ ] Badges aren't all pill-shaped — vary with square, flag, or plain text
+- [ ] FAQ isn't always accordion — consider side-by-side, searchable, or inline disclosure
+- [ ] Testimonials aren't always a carousel — consider masonry wall or single rotating quote
+- [ ] Footer is focused: main nav paths + legal links only. No bloat.
+
+### Icons & Images
+- [ ] Icons aren't exclusively Lucide — consider Phosphor or Heroicons for variety
+- [ ] Icon metaphors aren't obvious (no rocket for "Launch") — use less literal choices
+- [ ] Consistent stroke width across all icons
+- [ ] Real team photos or consistent illustration style — no generic stock
+- [ ] Branded favicon present (not Next.js default)
+
 ## Deployment
 
 - [ ] `pnpm build` succeeds without errors or warnings

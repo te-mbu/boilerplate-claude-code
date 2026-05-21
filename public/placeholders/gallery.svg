@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600" fill="none">
+  <rect width="600" height="600" fill="#f4f4f5"/>
+  <defs>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#d4d4d8"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="600" fill="url(#dots)"/>
+  <!-- Mountain/landscape icon -->
+  <g transform="translate(258, 265)">
+    <rect x="0" y="4" width="84" height="60" rx="6" stroke="#a1a1aa" stroke-width="2" fill="none"/>
+    <circle cx="26" cy="24" r="8" stroke="#a1a1aa" stroke-width="2" fill="none"/>
+    <polyline points="8,56 30,32 48,48 60,34 76,50" stroke="#a1a1aa" stroke-width="2" fill="none" stroke-linejoin="round"/>
+  </g>
+  <text x="300" y="350" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#a1a1aa">600 × 600</text>
+</svg>
