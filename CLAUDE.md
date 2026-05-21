@@ -86,6 +86,29 @@ src/lib/animations/ — GSAP config and low-level animation functions
 
 ## Workflows — How the Developer Iterates
 
+### 0. Redesign from Existing Site
+The developer provides a URL of the client's current site and wants a full redesign using the boilerplate.
+
+**Process (skill: site-analyzer):**
+1. Crawl 5-9 key pages using WebFetch (home, about, services, contact, pricing, team, portfolio, blog, legal)
+2. Extract all content: services, testimonials, team, stats, CTAs, tone, colors, typography
+3. Synthesize a Business Profile (identity, value proposition, visual identity, conversion structure)
+4. Map each section to the boilerplate's component catalogue
+5. Generate pre-filled `client.config.ts` values and `client-brief.md`
+6. Present a Redesign Proposal — **wait for developer approval before building**
+
+**Rules:**
+- Always present the proposal before generating any code
+- Extract real content — don't use placeholder text when real data exists
+- Never copy the visual design verbatim — use the project's own design tokens
+- Detect language and set `locale` accordingly
+- If WebFetch fails on some pages (SPA, auth-gated), note it and work with what's available
+
+**Example prompts:**
+- `"Analyse le site example.com et propose un redesign"`
+- `"Crawle basanto.fr et pré-remplis le client-brief + la config"`
+- `"Fais une analyse complète de competitor.com pour comprendre leur positionnement"`
+
 ### 1. Inspiration Screenshot
 The developer sends a screenshot + HTML/CSS from another site to adapt for the client.
 
@@ -152,6 +175,13 @@ The developer runs Lighthouse, checks accessibility, fixes responsive issues.
 4. Run ui-ux-pro-max `--design-system` to generate design direction from the brief
 5. Map recommendations to tokens in `globals.css` and record decisions in `design-system/decisions.md`
 6. Run `pnpm dev` and start building
+
+### From existing site (redesign)
+1. Ask Claude: `"Analyse le site https://client.com et propose un redesign"`
+2. The site-analyzer skill crawls key pages and extracts all business content
+3. Review and approve the Redesign Proposal (config + brief + page mapping)
+4. Claude applies `client.config.ts` → `pnpm setup` → `pnpm design`
+5. Iterate with real content from day 1
 
 ### Re-configuration
 Edit `client.config.ts` and run `pnpm setup` again — it's idempotent.

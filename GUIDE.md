@@ -84,6 +84,26 @@ pnpm dev
 
 Après `pnpm setup` : **immédiat**. Le setup génère une homepage complète avec les sections adaptées au `siteType` choisi.
 
+### À partir d'un site existant (redesign)
+
+Si le client a déjà un site, tu peux démarrer à partir de son URL :
+
+```
+"Analyse le site example.com et propose un redesign avec le boilerplate"
+```
+
+Claude va :
+1. **Crawler** les pages clés du site (home, about, services, contact, pricing, etc.)
+2. **Extraire** tout le contenu : services, testimonials, équipe, stats, CTAs, ton, couleurs
+3. **Synthétiser** un Business Profile complet
+4. **Mapper** chaque section sur les composants du boilerplate
+5. **Pré-remplir** `client.config.ts` + `client-brief.md` avec les données réelles
+6. **Proposer** une structure de redesign avant de toucher au code
+
+Tu valides la proposition, puis Claude applique la config et commence à construire avec du vrai contenu au lieu de placeholders.
+
+**Gratuit, zéro setup** — utilise le skill `site-analyzer` avec WebFetch intégré.
+
 ---
 
 ## Configuration détaillée
@@ -547,7 +567,34 @@ Claude choisit automatiquement le pattern adapté au contenu de chaque card.
    → "La couleur CTA est trop claire, propose un ajustement"
 ```
 
-### Workflow 2 — Adaptation d'une inspiration
+### Workflow 2 — Redesign à partir d'un site existant
+
+```
+1. Le client a déjà un site → tu as juste l'URL
+2. Demande à Claude :
+   "Analyse le site https://client-actuel.com et propose un redesign"
+
+Claude va (skill site-analyzer) :
+→ Crawler 5-9 pages clés (home, about, services, contact, pricing, etc.)
+→ Extraire tout le contenu : services, testimonials, équipe, stats, CTAs
+→ Détecter la langue, le ton, les couleurs, la typo
+→ Synthétiser un Business Profile complet
+→ Mapper chaque section sur les composants du boilerplate
+→ Proposer client.config.ts pré-rempli + client-brief.md
+
+3. Tu valides la proposition
+4. Claude applique la config → pnpm setup → pnpm design
+5. Tu itères sur le design avec du vrai contenu dès le jour 1
+```
+
+**Prompts pour ce workflow :**
+```
+"Analyse example.com et pré-remplis le client-brief + la config"
+"Crawle basanto.fr — extrais tout le contenu pour un redesign"
+"Fais une analyse complète de competitor.com pour comprendre leur positionnement"
+```
+
+### Workflow 3 — Adaptation d'une inspiration visuelle
 
 ```
 1. Capture d'écran du site qui t'inspire
@@ -561,7 +608,7 @@ Claude va :
 → Expliquer ce qu'il a changé et pourquoi
 ```
 
-### Workflow 3 — Itération de section
+### Workflow 4 — Itération de section
 
 ```
 "Rends le hero plus bold"
@@ -572,7 +619,7 @@ Claude va :
 
 Claude modifie le composant directement. Si tu demandes une comparaison A/B, il crée une variante `-v2.tsx`.
 
-### Workflow 4 — Ajustement de design tokens
+### Workflow 5 — Ajustement de design tokens
 
 ```
 "Le primary est trop foncé"
@@ -583,7 +630,7 @@ Claude modifie le composant directement. Si tu demandes une comparaison A/B, il 
 
 Claude modifie `globals.css` uniquement (light + dark) et liste les composants impactés.
 
-### Workflow 5 — Nouvelle page
+### Workflow 6 — Nouvelle page
 
 ```
 "Crée une page /case-studies avec une grille de projets et des filtres par catégorie"
@@ -597,7 +644,7 @@ Claude va :
 6. Ajouter à sitemap.ts
 ```
 
-### Workflow 6 — Pre-launch polish
+### Workflow 7 — Pre-launch polish
 
 ```
 "Lance la checklist pré-lancement"
