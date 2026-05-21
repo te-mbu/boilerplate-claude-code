@@ -23,9 +23,12 @@ You are building a website for [CLIENT_NAME]. Read the design system files befor
 6. design-system/motion.md — GSAP animation rules
 7. design-system/decisions.md — governance rules from past reviews (HIGHEST PRIORITY)
 
+## Composition Philosophy — "Page Blanche"
+Every section is composed from scratch for each client. Once the brief and design tokens are set, build section by section using the taste skill rules + shadcn/ui primitives. Never start from pre-built templates — each section is a unique response to the client's identity, content, and conversion goals.
+
 ## Rules
-- Compose pages directly with shadcn/ui primitives (Card, Button, Badge, Accordion, etc.) — do NOT import from examples/sections/
-- Use examples/sections/ as copy-paste reference patterns, not as runtime imports
+- **Page blanche**: compose every section from scratch using taste skill + shadcn/ui primitives — never from pre-built components
+- examples/sections/ exists as loose inspiration only — do NOT import, do NOT copy-paste verbatim
 - Use existing shadcn/ui components — do not create duplicates
 - Use CSS variables from globals.css for all token values — no hardcoded colors
 - Button component uses base-ui (no asChild) — use buttonVariants() + Link for nav links
@@ -60,7 +63,7 @@ src/app/api/ — API routes (outside site layout)
 src/components/ui/ — shadcn/ui primitives (do not modify directly)
 src/components/layout/ — navbar, footer, breadcrumb
 src/components/sections/ — functional section components (contact form, blog list/article)
-examples/sections/ — reference patterns for common sections (hero, features, pricing, etc.) — NOT imported, copy-paste only
+examples/sections/ — loose inspiration for common patterns (hero, features, pricing, etc.) — NOT imported, NOT copy-pasted verbatim
 src/components/animations/ — scroll animation wrappers (AnimateOnScroll, StaggerChildren, CountUp)
 src/components/shared/ — SEO, GTM, cookies, utilities
 src/lib/content/ — content layer (Sanity or static)
@@ -80,7 +83,7 @@ The developer provides a URL of the client's current site and wants a full redes
 1. Crawl 5-9 key pages using WebFetch (home, about, services, contact, pricing, team, portfolio, blog, legal)
 2. Extract all content: services, testimonials, team, stats, CTAs, tone, colors, typography
 3. Synthesize a Business Profile (identity, value proposition, visual identity, conversion structure)
-4. Map each section to the boilerplate's component catalogue
+4. Plan a section-by-section page structure tailored to the client's content and goals
 5. Generate pre-filled `client.config.ts` values and `client-brief.md`
 6. Present a Redesign Proposal — **wait for developer approval before building**
 
@@ -101,10 +104,9 @@ The developer sends a screenshot + HTML/CSS from another site to adapt for the c
 
 **Rules:**
 - Always read `design-system/client-brief.md` first to understand the client's visual identity
-- Read the taste skill's Creative Arsenal (Section 8) if unsure which pattern fits best
+- Read the taste skill's Creative Arsenal (Section 8) for pattern ideas
 - NEVER copy colors, fonts, or spacing from the inspiration — adapt everything to the project's design tokens from `globals.css`
-- Rewrite the HTML to use existing shadcn/ui components and section components from `src/components/sections/`
-- If no existing section component fits, create a new one in `src/components/sections/` following the same pattern (typed props, server component by default, responsive)
+- Compose the section from scratch with shadcn/ui primitives, using the screenshot as directional inspiration only
 - Save the original screenshot in `references/` for future reference
 - Explain what you adapted and what you deliberately changed to fit the client's brand
 
@@ -135,8 +137,8 @@ The developer provides a brief, wireframe, or Figma and wants a full page built.
 2. Read the taste skill — check which DESIGN_VARIANCE / MOTION_INTENSITY / VISUAL_DENSITY fits the page type
 3. Create the route in `src/app/(site)/`
 4. Export `generateMetadata` with unique title + description
-5. Compose the page with shadcn/ui primitives — browse `examples/sections/` for reference patterns
-6. Use shadcn/ui primitives for all new components — check the ui-styling skill references if unsure which component fits
+5. Compose each section from scratch with shadcn/ui primitives, guided by taste skill rules — do not start from templates
+6. Use shadcn/ui primitives (Card, Button, Badge, Separator, Accordion, etc.) as building blocks
 7. Follow the SITE conversion pattern from `design-system/patterns.md` (Hook → Value → Proof → CTA)
 8. Run the taste skill's Pre-Flight Check (Section 9) before delivering
 9. Test at 375px, 768px, 1440px mentally (or flag if unsure about responsive behavior)
