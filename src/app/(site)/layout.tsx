@@ -9,7 +9,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     <>
       <SkipToContent />
       <Navbar />
-      <main id="main-content" className="flex-1">{children}</main>
+      <main id="main-content" className="flex-1 pt-14">{children}</main>
       <Footer />
       <script
         type="application/ld+json"

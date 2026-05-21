@@ -34,7 +34,7 @@ export function Navbar({
   const [scrolled, setScrolled] = useState(false);
 
   const handleScroll = useCallback(() => {
-    const isScrolled = window.scrollY > 16;
+    const isScrolled = window.scrollY > 48;
     setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
   }, []);
 
@@ -49,15 +49,21 @@ export function Navbar({
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-colors duration-200",
+        "fixed top-0 z-50 w-full transition-all duration-300 ease-out",
         isTransparent
           ? "bg-transparent"
-          : "border-b border-border bg-background/80 backdrop-blur-lg"
+          : "border-b border-border/50 bg-background/60 backdrop-blur-xl shadow-sm"
       )}
     >
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-bold text-foreground">
+        <Link
+          href="/"
+          className={cn(
+            "flex items-center gap-2 font-bold transition-colors duration-300",
+            isTransparent ? "text-white" : "text-foreground"
+          )}
+        >
           <span className="text-lg">{brandName}</span>
         </Link>
 
@@ -85,7 +91,11 @@ export function Navbar({
         <div className="flex items-center gap-2">
           <Link
             href="/contact"
-            className={cn(buttonVariants({ size: "sm" }), "hidden md:inline-flex")}
+            className={cn(
+              buttonVariants({ size: "sm" }),
+              "hidden md:inline-flex transition-all duration-300",
+              isTransparent && "bg-white/10 text-white backdrop-blur-sm border-white/20 hover:bg-white/20"
+            )}
           >
             Contact
           </Link>
@@ -93,7 +103,10 @@ export function Navbar({
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className={cn(
+              "md:hidden",
+              isTransparent && "text-white hover:bg-white/10"
+            )}
             onClick={() => setMobileOpen(true)}
             aria-label="Open menu"
           >

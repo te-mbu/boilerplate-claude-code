@@ -67,6 +67,7 @@
   --font-mono: var(--font-geist-mono);
   /* TODO: Set headingFont in client.config.ts and run pnpm setup */
   --font-heading: var(--font-sans);
+  --font-serif: "Georgia", "Times New Roman", serif;
 
   /* --- Radii --- */
   --radius-sm: calc(var(--radius) * 0.6);
@@ -181,6 +182,18 @@
   html {
     @apply font-sans;
   }
+}
+
+/* --- Noise overlay: subtle grain texture for premium feel --- */
+/* Remove this block to disable. Controlled by --noise-opacity variable. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: var(--noise-opacity, 0.04);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 @media (prefers-reduced-motion: reduce) {
