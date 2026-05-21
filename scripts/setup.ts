@@ -520,6 +520,13 @@ async function main() {
     ]);
   }
 
+  // --- 1c. Update html lang attribute ---
+  const htmlLang = config.locale === "en" ? "en" : "fr";
+  console.log(`🌐 Setting html lang="${htmlLang}"...`);
+  replaceInFile("src/app/layout.tsx", [
+    [/lang="[a-z]{2}"/, `lang="${htmlLang}"`],
+  ]);
+
   // --- 2. Update package.json ---
   console.log("📦 Updating package.json...");
   replaceInFile("package.json", [
@@ -534,6 +541,13 @@ async function main() {
     [/## Locale:.*/, `## Locale: ${config.locale}`],
     [/## CMS:.*/, `## CMS: ${config.cms}`],
   ]);
+  // Remove engine references from CLAUDE.md if engine is disabled
+  if (!config.pages.engine) {
+    replaceInFile("CLAUDE.md", [
+      [/src\/components\/engine\/.*\n/g, ""],
+      [",engine", ""],
+    ]);
+  }
 
   // --- 4. Setup .env.local ---
   console.log("🔐 Setting up .env.local...");
@@ -819,8 +833,67 @@ async function main() {
 
   // --- 7c. Update sitemap with enabled pages only ---
   console.log("🗺️  Updating sitemap...");
-  // Sitemap reads from content provider, static pages are hardcoded — we leave them
-  // as the developer can adjust. The disabled page directories are already removed.
+  if (fileExists("src/app/sitemap.ts")) {
+    const sitemapHrefs: Record<string, string[]> = {
+      about: ["/about"],
+      services: ["/services"],
+      pricing: ["/pricing"],
+      features: ["/features"],
+      portfolio: ["/portfolio"],
+      team: ["/team"],
+      contact: ["/contact"],
+      blog: ["/blog"],
+      changelog: ["/changelog"],
+    };
+
+    let sitemapContent = readFile("src/app/sitemap.ts");
+    for (const [page, hrefs] of Object.entries(sitemapHrefs)) {
+      if (!config.pages[page as keyof typeof config.pages]) {
+        for (const href of hrefs) {
+          // Remove the full sitemap entry line for this path
+          const lineRegex = new RegExp(
+            `\\s*\\{[^}]*\\/\\$\\{baseUrl\\}${href.replace("/", "\\/")}[^}]*\\},?\\n`,
+            "g",
+          );
+          const oldLen = sitemapContent.length;
+          sitemapContent = sitemapContent.replace(lineRegex, "");
+          // Fallback: match simpler pattern with template literal
+          if (sitemapContent.length === oldLen) {
+            const simpleRegex = new RegExp(
+              `\\s*\\{[^}]*\\$\\{baseUrl\\}${href.replace("/", "\\/")}["\`'][^}]*\\},?\\n`,
+              "g",
+            );
+            sitemapContent = sitemapContent.replace(simpleRegex, "");
+          }
+        }
+        console.log(`  🗑️  Removed /${page} from sitemap`);
+      }
+    }
+
+    // Also remove dynamic blog/project sections if those pages are disabled
+    if (!config.pages.blog) {
+      sitemapContent = sitemapContent.replace(
+        /\n\s*\/\/ Dynamic blog posts[\s\S]*?(?=\n\s*\/\/ Dynamic projects|\n\s*\/\/ Dynamic blog categories|\n\s*return)/,
+        "\n",
+      );
+      sitemapContent = sitemapContent.replace(
+        /\n\s*\/\/ Dynamic blog categories[\s\S]*?(?=\n\s*\/\/ Dynamic projects|\n\s*return)/,
+        "\n",
+      );
+      // Remove blogPages and categoryPages from the return
+      sitemapContent = sitemapContent.replace(/, \.\.\.blogPages/g, "");
+      sitemapContent = sitemapContent.replace(/, \.\.\.categoryPages/g, "");
+    }
+    if (!config.pages.portfolio) {
+      sitemapContent = sitemapContent.replace(
+        /\n\s*\/\/ Dynamic projects[\s\S]*?(?=\n\s*return)/,
+        "\n",
+      );
+      sitemapContent = sitemapContent.replace(/, \.\.\.projectPages/g, "");
+    }
+
+    writeFile("src/app/sitemap.ts", sitemapContent);
+  }
 
   // --- 8. Install Sanity deps if needed ---
   if (config.cms === "sanity") {

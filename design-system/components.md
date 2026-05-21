@@ -215,32 +215,46 @@
 
 ---
 
-## Custom Components (To Build)
+## Custom Components
 
 ### Layout
 | Component | Path | Purpose |
 |---|---|---|
 | `Navbar` | `src/components/layout/navbar.tsx` | Fixed top navigation with logo, links, CTA button, mobile hamburger |
-| `Footer` | `src/components/layout/footer.tsx` | Site footer with columns, links, legal, social icons |
-| `Container` | `src/components/layout/container.tsx` | Max-width wrapper (`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`) |
-| `Section` | `src/components/layout/section.tsx` | Semantic `<section>` with `py-section` padding and optional background |
+| `Footer` | `src/components/layout/footer.tsx` | Active footer (copied from template by setup) |
+| `FooterMarketing` | `src/components/layout/footer-marketing.tsx` | 5-column footer with newsletter — for marketing/saas siteTypes |
+| `FooterMinimal` | `src/components/layout/footer-minimal.tsx` | Single-row footer — for portfolio/corporate/landing siteTypes |
 
-### Section Components (Engine)
-| Component | Path | Purpose |
-|---|---|---|
-| `HeroSection` | `src/components/sections/hero.tsx` | Above-the-fold hero with headline, subline, CTA, optional media |
-| `FeaturesSection` | `src/components/sections/features.tsx` | Grid of feature cards (icon + title + description) |
-| `TestimonialsSection` | `src/components/sections/testimonials.tsx` | Social proof carousel or grid |
-| `PricingSection` | `src/components/sections/pricing.tsx` | Pricing cards with toggle (monthly/yearly) |
-| `FAQSection` | `src/components/sections/faq.tsx` | Accordion-based FAQ block |
-| `CTASection` | `src/components/sections/cta.tsx` | Full-width conversion block with headline + button |
-| `LogoCloudSection` | `src/components/sections/logo-cloud.tsx` | Client/partner logo strip |
-| `StatsSection` | `src/components/sections/stats.tsx` | Animated number counters |
-| `ContactSection` | `src/components/sections/contact.tsx` | Contact form with validation |
+### Section Components
+| Component | Import | Props | Purpose |
+|---|---|---|---|
+| `HeroCentered` | `@/components/sections/hero` | `heading`, `subheading`, `primaryCta`, `secondaryCta?`, `badge?`, `fullHeight?` | Centered hero with headline, CTAs, optional badge |
+| `HeroSplit` | `@/components/sections/hero` | `heading`, `subheading`, `primaryCta`, `secondaryCta?`, `image`, `imagePosition?` | Side-by-side hero with image |
+| `FeaturesGrid` | `@/components/sections/features` | `features[]`, `heading?`, `subheading?`, `columns?` | Grid of icon + title + description cards |
+| `FeaturesAlternating` | `@/components/sections/features` | *(see file)* | Alternating text/image rows |
+| `LogoCloud` | `@/components/sections/social-proof` | `logos[]`, `heading?` | Client/partner logo strip (static) |
+| `TestimonialsGrid` | `@/components/sections/social-proof` | `testimonials[]`, `heading?`, `columns?` | Testimonial cards in a grid |
+| `TestimonialCarousel` | `@/components/sections/social-proof` | `testimonials[]`, `heading?` | Horizontal scroll-snap carousel with prev/next |
+| `StatsBar` | `@/components/sections/stats` | `stats[]`, `heading?`, `variant?` | Key metrics in a row. Variants: `default`, `card`, `dark` |
+| `ProcessSteps` | `@/components/sections/timeline` | `steps[]`, `heading?`, `subheading?`, `layout?` | Process/timeline. Layouts: `vertical` (with line), `horizontal` |
+| `ComparisonCards` | `@/components/sections/comparison` | `options[]`, `heading?`, `subheading?` | Side-by-side feature comparison with Check/X |
+| `GalleryGrid` | `@/components/sections/gallery` | `images[]`, `heading?`, `columns?` | Image grid with Dialog lightbox + keyboard nav |
+| `Marquee` | `@/components/sections/marquee` | `items[]`, `speed?`, `direction?`, `pauseOnHover?` | Infinite scroll text/logos. CSS-only, zero JS |
+| `PricingCards` | `@/components/sections/pricing` | `plans[]` | Pricing cards with features list + popular badge |
+| `PricingToggle` | `@/components/sections/pricing` | *(see file)* | Monthly/yearly pricing toggle |
+| `FaqSection` | `@/components/sections/faq` | `faqs[]`, `heading?`, `subheading?` | Accordion FAQ with JSON-LD structured data |
+| `CtaCentered` | `@/components/sections/cta` | `heading`, `description?`, `primaryCta`, `secondaryCta?`, `variant?` | CTA block. Variants: `default`, `gradient`, `dark` |
+| `CtaNewsletter` | `@/components/sections/cta` | *(see file)* | CTA with newsletter signup form |
+| `PortfolioGrid` | `@/components/sections/portfolio` | `projects[]`, `heading?`, `columns?` | Project cards with image, tags, tech stack |
+| `TeamGrid` | `@/components/sections/team` | `members[]`, `heading?`, `columns?` | Team member cards with photo + social links |
+| `ContactForm` | `@/components/sections/contact` | *(see file)* | Contact form with Zod validation + Server Action |
+| `ContactInfo` | `@/components/sections/contact` | *(see file)* | Contact details (email, phone, address, map) |
 
-### Utility Components
-| Component | Path | Purpose |
-|---|---|---|
-| `AnimateOnScroll` | `src/components/utils/animate-on-scroll.tsx` | GSAP ScrollTrigger wrapper |
-| `Counter` | `src/components/utils/counter.tsx` | Animated number counter (GSAP) |
-| `SkipToContent` | `src/components/utils/skip-to-content.tsx` | Accessibility skip link |
+### Animation Wrappers
+| Component | Import | Props | Purpose |
+|---|---|---|---|
+| `AnimateOnScroll` | `@/components/animations` | `preset?`, `duration?`, `delay?` | Animates children on scroll. Presets: `fade-up`, `fade-in`, `slide-left`, `slide-right`, `scale-up` |
+| `StaggerChildren` | `@/components/animations` | `preset?`, `stagger?`, `duration?`, `selector?` | Animates children one by one. Presets: `fade-up`, `fade-in`, `scale-up` |
+| `CountUp` | `@/components/animations` | `value`, `prefix?`, `suffix?`, `duration?` | Animates a number from 0 to target on scroll |
+
+All animation wrappers respect `prefers-reduced-motion` and use GSAP lazy-loaded via `getGsap()`.

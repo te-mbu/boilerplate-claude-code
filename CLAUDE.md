@@ -7,7 +7,7 @@ You are building a website for [CLIENT_NAME]. Read the design system files befor
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS 4 + pnpm
 - UI primitives: shadcn/ui (src/components/ui/) — do NOT create duplicates
 - Design intelligence: ui-ux-pro-max skill (.claude/skills/ui-ux-pro-max/) — ALWAYS consult before building UI
-- Custom components: src/components/{layout,sections,engine,shared}/
+- Custom components: src/components/{layout,sections,shared}/
 - Animations: GSAP (client-only, use-gsap hook, respect prefers-reduced-motion)
 - CMS: Content layer abstraction (src/lib/content/) — toggle via CONTENT_PROVIDER env
 - Deployment: Vercel
@@ -73,12 +73,12 @@ src/app/(site)/ — all pages with shared nav+footer layout
 src/app/api/ — API routes (outside site layout)
 src/components/ui/ — shadcn/ui primitives (do not modify directly)
 src/components/layout/ — navbar, footer, breadcrumb
-src/components/sections/ — page sections (hero, features, pricing, etc.)
-src/components/engine/ — AI chatbot, diagnostic form
+src/components/sections/ — page sections (hero, features, pricing, stats, timeline, gallery, marquee, etc.)
+src/components/animations/ — scroll animation wrappers (AnimateOnScroll, StaggerChildren, CountUp)
 src/components/shared/ — SEO, GTM, cookies, utilities
 src/lib/content/ — content layer (Sanity or static)
 src/lib/hooks/ — custom hooks (GSAP, media query, form, etc.)
-src/lib/animations/ — GSAP config and presets
+src/lib/animations/ — GSAP config and low-level animation functions
 
 ## Design System — Additional Files
 8. design-system/client-brief.md — client identity, brand personality, visual direction (READ for context)
