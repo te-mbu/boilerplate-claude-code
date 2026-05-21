@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useLayoutEffect } from "react";
-import { gsap, ScrollTrigger } from "@/lib/animations/gsap-config";
+import { getGsap } from "@/lib/animations/gsap-config";
 
 interface ScrollTriggerOptions {
   trigger?: string | Element;
@@ -16,7 +16,7 @@ interface ScrollTriggerOptions {
 export function useScrollTrigger<T extends HTMLElement = HTMLDivElement>(
   animation: (
     element: T,
-    gsapInstance: typeof gsap
+    gsapInstance: typeof import("gsap").gsap
   ) => gsap.core.Tween | gsap.core.Timeline,
   options: ScrollTriggerOptions = {}
 ) {
@@ -31,29 +31,38 @@ export function useScrollTrigger<T extends HTMLElement = HTMLDivElement>(
     ).matches;
     if (prefersReducedMotion) return;
 
-    const {
-      once = true,
-      start = "top 80%",
-      end = "bottom 20%",
-      ...restOptions
-    } = options;
+    let cancelled = false;
 
-    const tween = animation(element, gsap);
+    getGsap().then(({ gsap, ScrollTrigger }) => {
+      if (cancelled) return;
 
-    ScrollTrigger.create({
-      trigger: element,
-      start,
-      end,
-      toggleActions: once
-        ? "play none none none"
-        : "play reverse play reverse",
-      animation: tween,
-      ...restOptions,
+      const {
+        once = true,
+        start = "top 80%",
+        end = "bottom 20%",
+        ...restOptions
+      } = options;
+
+      const tween = animation(element, gsap);
+
+      ScrollTrigger.create({
+        trigger: element,
+        start,
+        end,
+        toggleActions: once
+          ? "play none none none"
+          : "play reverse play reverse",
+        animation: tween,
+        ...restOptions,
+      });
     });
 
     return () => {
-      ScrollTrigger.getAll().forEach((st) => {
-        if (st.trigger === element) st.kill();
+      cancelled = true;
+      getGsap().then(({ ScrollTrigger }) => {
+        ScrollTrigger.getAll().forEach((st) => {
+          if (st.trigger === element) st.kill();
+        });
       });
     };
   }, [animation, options]);

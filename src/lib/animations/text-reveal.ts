@@ -1,6 +1,8 @@
-import { gsap } from "./gsap-config";
+import { getGsap } from "./gsap-config";
 
-export function textReveal(element: Element, delay = 0) {
+export async function textReveal(element: Element, delay = 0) {
+  const { gsap } = await getGsap();
+
   // Split text into words wrapped in spans
   const text = element.textContent || "";
   const words = text.split(" ");

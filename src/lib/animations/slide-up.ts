@@ -1,6 +1,7 @@
-import { gsap } from "./gsap-config";
+import { getGsap } from "./gsap-config";
 
-export function slideUp(element: Element, delay = 0) {
+export async function slideUp(element: Element, delay = 0) {
+  const { gsap } = await getGsap();
   return gsap.from(element, {
     y: 30,
     opacity: 0,

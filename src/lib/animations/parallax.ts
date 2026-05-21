@@ -1,6 +1,7 @@
-import { gsap, ScrollTrigger } from "./gsap-config";
+import { getGsap } from "./gsap-config";
 
-export function parallax(element: Element, speed = 0.5) {
+export async function parallax(element: Element, speed = 0.5) {
+  const { gsap } = await getGsap();
   return gsap.to(element, {
     y: () => speed * 100,
     ease: "none",

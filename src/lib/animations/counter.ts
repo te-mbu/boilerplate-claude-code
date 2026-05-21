@@ -1,10 +1,11 @@
-import { gsap } from "./gsap-config";
+import { getGsap } from "./gsap-config";
 
-export function counter(
+export async function counter(
   element: Element,
   endValue: number,
   options: { duration?: number; suffix?: string; prefix?: string } = {}
 ) {
+  const { gsap } = await getGsap();
   const { duration = 2, suffix = "", prefix = "" } = options;
   const obj = { value: 0 };
 

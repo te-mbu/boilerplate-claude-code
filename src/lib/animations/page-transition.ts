@@ -1,6 +1,7 @@
-import { gsap } from "./gsap-config";
+import { getGsap } from "./gsap-config";
 
-export function pageEnter(element: Element) {
+export async function pageEnter(element: Element) {
+  const { gsap } = await getGsap();
   return gsap.from(element, {
     opacity: 0,
     duration: 0.3,
@@ -8,7 +9,8 @@ export function pageEnter(element: Element) {
   });
 }
 
-export function pageExit(element: Element) {
+export async function pageExit(element: Element) {
+  const { gsap } = await getGsap();
   return gsap.to(element, {
     opacity: 0,
     duration: 0.3,

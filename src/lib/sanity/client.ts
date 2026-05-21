@@ -13,4 +13,5 @@
 //   token: process.env.SANITY_API_TOKEN,
 // });
 
-export const sanityClient = null as never;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const sanityClient = null as unknown as { fetch: (query: string, params?: Record<string, unknown>) => Promise<any> };

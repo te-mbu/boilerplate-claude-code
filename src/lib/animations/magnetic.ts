@@ -1,6 +1,8 @@
-import { gsap } from "./gsap-config";
+import { getGsap } from "./gsap-config";
 
-export function magnetic(element: HTMLElement, strength = 0.3) {
+export async function magnetic(element: HTMLElement, strength = 0.3) {
+  const { gsap } = await getGsap();
+
   const handleMouseMove = (e: MouseEvent) => {
     const rect = element.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;

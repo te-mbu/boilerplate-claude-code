@@ -1,6 +1,7 @@
-import { gsap } from "./gsap-config";
+import { getGsap } from "./gsap-config";
 
-export function stagger(parent: Element, childSelector: string, delay = 0) {
+export async function stagger(parent: Element, childSelector: string, delay = 0) {
+  const { gsap } = await getGsap();
   return gsap.from(parent.querySelectorAll(childSelector), {
     y: 20,
     opacity: 0,

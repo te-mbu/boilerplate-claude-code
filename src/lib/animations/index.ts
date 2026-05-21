@@ -6,4 +6,4 @@ export { counter } from "./counter";
 export { textReveal } from "./text-reveal";
 export { magnetic } from "./magnetic";
 export { pageEnter, pageExit } from "./page-transition";
-export { gsap, ScrollTrigger } from "./gsap-config";
+export { getGsap, getScrollTrigger } from "./gsap-config";
