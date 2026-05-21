@@ -27,7 +27,7 @@ Ce fichier documente les frictions rencontrées en démarrant un projet client �
 | 7 | Layout components (navbar/footer) pas adaptés au siteType | ✅ FIXED |
 | 8 | Placeholders non remplacés | ✅ FIXED |
 | 9 | page.tsx starter non supprimé | ✅ FIXED |
-| 10 | Pas de skill UI/UX design | ⬜ Manual (install uipro-cli per project) |
+| 10 | Pas de skill UI/UX design | ✅ FIXED (pre-installed in .claude/skills/) |
 | 11 | Middleware next-intl actif | ✅ FIXED |
 | 12 | GSAP importé statiquement | ✅ FIXED |
 | 13 | useMediaQuery cause CLS | ✅ FIXED |
