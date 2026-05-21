@@ -28,43 +28,8 @@ async function loadConfig() {
   return mod.default;
 }
 
-// --- Hex to OKLch (approximate conversion) ---
-function hexToOklch(hex: string): string {
-  const r = parseInt(hex.slice(1, 3), 16) / 255;
-  const g = parseInt(hex.slice(3, 5), 16) / 255;
-  const b = parseInt(hex.slice(5, 7), 16) / 255;
-
-  // sRGB to linear
-  const toLinear = (c: number) =>
-    c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  const lr = toLinear(r);
-  const lg = toLinear(g);
-  const lb = toLinear(b);
-
-  // Linear sRGB to OKLAB
-  const l_ = 0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb;
-  const m_ = 0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb;
-  const s_ = 0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb;
-
-  const l_cbrt = Math.cbrt(l_);
-  const m_cbrt = Math.cbrt(m_);
-  const s_cbrt = Math.cbrt(s_);
-
-  const L = 0.2104542553 * l_cbrt + 0.793617785 * m_cbrt - 0.0040720468 * s_cbrt;
-  const a = 1.9779984951 * l_cbrt - 2.428592205 * m_cbrt + 0.4505937099 * s_cbrt;
-  const bOk = 0.0259040371 * l_cbrt + 0.7827717662 * m_cbrt - 0.808675766 * s_cbrt;
-
-  const C = Math.sqrt(a * a + bOk * bOk);
-  let h = (Math.atan2(bOk, a) * 180) / Math.PI;
-  if (h < 0) h += 360;
-
-  const Lr = Math.round(L * 1000) / 1000;
-  const Cr = Math.round(C * 1000) / 1000;
-  const hr = Math.round(h * 1000) / 1000;
-
-  if (Cr < 0.002) return `oklch(${Lr} 0 0)`;
-  return `oklch(${Lr} ${Cr} ${hr})`;
-}
+// --- Color conversion (shared) ---
+import { hexToOklch } from "./utils/color.js";
 
 // --- File helpers ---
 function readFile(relativePath: string): string {
@@ -101,364 +66,90 @@ function replaceInFile(relativePath: string, replacements: [string | RegExp, str
 }
 
 // =============================================================================
-// Home page templates by siteType
+// Home page templates by siteType — compose with shadcn primitives
 // =============================================================================
 function generateHomePage(
   siteType: string,
   pages: Record<string, boolean>,
 ): string {
-  const templates: Record<string, () => string> = {
-    portfolio: () => homePortfolio(pages),
-    marketing: () => homeMarketing(pages),
-    corporate: () => homeCorporate(pages),
-    saas: () => homeSaas(pages),
-    landing: () => homeLanding(pages),
-    engine: () => homeMarketing(pages), // engine uses marketing layout
+  const contactHref = pages.contact ? "/contact" : "#";
+  const secondaryHref = pages.services ? "/services" : (pages.about ? "/about" : "#");
+
+  // Customize hero and section hints per siteType
+  const hints: Record<string, { hero: string; sections: string; cta: string }> = {
+    portfolio: {
+      hero: `[TODO: Studio tagline]`,
+      sections: `      {/* [TODO: Selected Work — compose with Card variant="interactive" + next/image] */}
+      {/* Wrap grid with <StaggerChildren preset="fade-up"> */}
+      {/* See examples/sections/portfolio/ for reference */}
+
+      {/* [TODO: Testimonials — compose with Card + blockquote] */}
+      {/* Wrap with <AnimateOnScroll preset="fade-up"> */}
+      {/* See examples/sections/social-proof/ for reference */}`,
+      cta: `[TODO: Have a project in mind?]`,
+    },
+    marketing: {
+      hero: `[TODO: Main value proposition]`,
+      sections: `      {/* [TODO: Social proof — logo cloud with flex/grid + next/image] */}
+      {/* Wrap with <StaggerChildren preset="fade-in"> */}
+      {/* See examples/sections/social-proof/logo-cloud.tsx for reference */}
+
+      {/* [TODO: Features/services grid — compose with Card, CardHeader, CardTitle, CardDescription] */}
+      {/* Wrap grid with <StaggerChildren preset="fade-up"> for card-by-card reveal */}
+      {/* See examples/sections/features/ for reference */}
+
+      {/* [TODO: Testimonials — compose with Card + blockquote] */}
+      {/* Wrap with <AnimateOnScroll preset="fade-up"> */}
+      {/* See examples/sections/social-proof/ for reference */}`,
+      cta: `[TODO: Ready to get started?]`,
+    },
+    corporate: {
+      hero: `[TODO: Corporate headline]`,
+      sections: `      {/* [TODO: Key strengths grid — compose with Card + Lucide icons, 4 columns] */}
+      {/* See examples/sections/features/ for reference */}
+
+      {/* [TODO: Client success stories — compose with Card + blockquote] */}
+      {/* See examples/sections/social-proof/ for reference */}
+
+      {/* [TODO: Leadership team — compose with Card + Avatar + next/image] */}
+      {/* See examples/sections/team/ for reference */}`,
+      cta: `[TODO: Let's work together]`,
+    },
+    saas: {
+      hero: `[TODO: Product headline — what it does]`,
+      sections: `      {/* [TODO: Logo cloud — trusted by X teams] */}
+      {/* See examples/sections/social-proof/logo-cloud.tsx for reference */}
+
+      {/* [TODO: Product features grid — compose with Card + icons, 3x2 grid] */}
+      {/* See examples/sections/features/ for reference */}
+
+      {/* [TODO: Pricing cards — compose with Card + Badge("popular") + Button CTA] */}
+      {/* See examples/sections/pricing/ for reference */}
+
+      {/* [TODO: FAQ — compose with Accordion component] */}
+      {/* See examples/sections/faq/ for reference */}`,
+      cta: `[TODO: Ready to scale?]`,
+    },
+    landing: {
+      hero: `[TODO: Bold headline — one big promise]`,
+      sections: `      {/* [TODO: Key benefits — compose with Card, 3 columns] */}
+      {/* See examples/sections/features/ for reference */}
+
+      {/* [TODO: Social proof — compose with Card + blockquote] */}
+      {/* See examples/sections/social-proof/ for reference */}`,
+      cta: `[TODO: Don't miss out — final CTA]`,
+    },
   };
-  const generator = templates[siteType] ?? templates.marketing;
-  return generator();
-}
 
-function homePortfolio(pages: Record<string, boolean>): string {
-  const imports = [
-    `import type { Metadata } from "next";`,
-    `import { createMetadata, siteConfig } from "@/lib/metadata";`,
-    `import { HeroCentered } from "@/components/sections/hero";`,
-  ];
-  const sections: string[] = [];
+  const h = hints[siteType] ?? hints.marketing;
 
-  // Hero
-  sections.push(`      <HeroCentered
-        heading="[TODO: Studio tagline]"
-        subheading="[TODO: One-liner about what you do and for whom]"
-        primaryCta={{ label: "[TODO: CTA label]", href: "${pages.portfolio ? "/portfolio" : "/contact"}" }}
-        secondaryCta={{ label: "[TODO: Secondary CTA]", href: "${pages.contact ? "/contact" : "/about"}" }}
-        fullHeight
-      />`);
-
-  // Portfolio grid
-  if (pages.portfolio) {
-    imports.push(`import { PortfolioGrid } from "@/components/sections/portfolio";`);
-    sections.push(`      <PortfolioGrid
-        heading="Selected Work"
-        projects={[
-          // TODO: Replace with real projects or fetch from content provider
-          // { title: "Project Name", slug: "project", client: "Client", category: "Web", description: "...", mainImage: { src: "/placeholders/project.svg", alt: "..." }, featured: true, completedAt: "2024" },
-        ]}
-        columns={2}
-      />`);
-  }
-
-  // Testimonials
-  imports.push(`import { TestimonialsGrid } from "@/components/sections/social-proof";`);
-  sections.push(`      <TestimonialsGrid
-        heading="What Clients Say"
-        testimonials={[
-          // TODO: Replace with real testimonials or fetch from content provider
-          // { name: "Client Name", role: "CEO", company: "Company", quote: "...", featured: true },
-        ]}
-        columns={2}
-      />`);
-
-  // CTA
-  imports.push(`import { CtaCentered } from "@/components/sections/cta";`);
-  sections.push(`      <CtaCentered
-        heading="[TODO: Have a project in mind?]"
-        description="[TODO: Short invitation to collaborate]"
-        primaryCta={{ label: "[TODO: Start a project]", href: "${pages.contact ? "/contact" : "#"}" }}
-      />`);
-
-  return buildPage(imports, sections);
-}
-
-function homeMarketing(pages: Record<string, boolean>): string {
-  const imports = [
-    `import type { Metadata } from "next";`,
-    `import { createMetadata, siteConfig } from "@/lib/metadata";`,
-    `import { HeroCentered } from "@/components/sections/hero";`,
-    `import { LogoCloud } from "@/components/sections/social-proof";`,
-  ];
-  const sections: string[] = [];
-
-  // Hero
-  sections.push(`      <HeroCentered
-        heading="[TODO: Main value proposition]"
-        subheading="[TODO: Supporting statement — what you do, who it's for, why it matters]"
-        primaryCta={{ label: "[TODO: Primary CTA]", href: "${pages.contact ? "/contact" : "#"}" }}
-        secondaryCta={{ label: "[TODO: Secondary CTA]", href: "${pages.services ? "/services" : "/about"}" }}
-      />`);
-
-  // Logo cloud
-  sections.push(`      <LogoCloud
-        heading="[TODO: Trusted by industry leaders]"
-        logos={[
-          // TODO: Add client/partner logos
-          // { src: "/logos/company.svg", alt: "Company Name" },
-        ]}
-      />`);
-
-  // Features
-  imports.push(`import { FeaturesGrid } from "@/components/sections/features";`);
-  sections.push(`      <FeaturesGrid
-        heading="[TODO: Why choose us]"
-        subheading="[TODO: Brief intro to your key differentiators]"
-        features={[
-          // TODO: Replace with real features/services
-          { icon: "Zap", title: "[Feature 1]", description: "[TODO: Description]" },
-          { icon: "Shield", title: "[Feature 2]", description: "[TODO: Description]" },
-          { icon: "BarChart3", title: "[Feature 3]", description: "[TODO: Description]" },
-        ]}
-        columns={3}
-      />`);
-
-  // Testimonials
-  imports.push(`import { TestimonialsGrid } from "@/components/sections/social-proof";`);
-  sections.push(`      <TestimonialsGrid
-        heading="What Our Clients Say"
-        testimonials={[
-          // TODO: Replace with real testimonials or fetch from content provider
-          // { name: "Client Name", role: "CEO", company: "Company", quote: "...", featured: true },
-        ]}
-      />`);
-
-  // CTA
-  imports.push(`import { CtaCentered } from "@/components/sections/cta";`);
-  sections.push(`      <CtaCentered
-        heading="[TODO: Ready to get started?]"
-        description="[TODO: Short persuasive closing statement]"
-        primaryCta={{ label: "[TODO: Get started]", href: "${pages.contact ? "/contact" : "#"}" }}
-        secondaryCta={{ label: "[TODO: Learn more]", href: "${pages.about ? "/about" : "/services"}" }}
-        variant="gradient"
-      />`);
-
-  return buildPage(imports, sections);
-}
-
-function homeCorporate(pages: Record<string, boolean>): string {
-  const imports = [
-    `import type { Metadata } from "next";`,
-    `import { createMetadata, siteConfig } from "@/lib/metadata";`,
-    `import { HeroSplit } from "@/components/sections/hero";`,
-  ];
-  const sections: string[] = [];
-
-  // Hero split
-  sections.push(`      <HeroSplit
-        heading="[TODO: Corporate headline]"
-        subheading="[TODO: Company mission or value proposition]"
-        primaryCta={{ label: "[TODO: Primary CTA]", href: "${pages.contact ? "/contact" : "#"}" }}
-        secondaryCta={{ label: "[TODO: About us]", href: "${pages.about ? "/about" : "#"}" }}
-        image={{ src: "/placeholders/hero.svg", alt: "[TODO: Hero image alt text]", width: 1600, height: 900 }}
-      />`);
-
-  // Features
-  imports.push(`import { FeaturesGrid } from "@/components/sections/features";`);
-  sections.push(`      <FeaturesGrid
-        heading="[TODO: Our expertise]"
-        subheading="[TODO: What sets us apart]"
-        features={[
-          // TODO: Replace with real services/strengths
-          { icon: "Building2", title: "[Strength 1]", description: "[TODO: Description]" },
-          { icon: "Users", title: "[Strength 2]", description: "[TODO: Description]" },
-          { icon: "Target", title: "[Strength 3]", description: "[TODO: Description]" },
-          { icon: "Award", title: "[Strength 4]", description: "[TODO: Description]" },
-        ]}
-        columns={4}
-      />`);
-
-  // Testimonials
-  imports.push(`import { TestimonialsGrid } from "@/components/sections/social-proof";`);
-  sections.push(`      <TestimonialsGrid
-        heading="Client Success Stories"
-        testimonials={[
-          // TODO: Replace with real testimonials or fetch from content provider
-          // { name: "Client Name", role: "CEO", company: "Company", quote: "...", featured: true },
-        ]}
-        columns={2}
-      />`);
-
-  // Team
-  if (pages.team) {
-    imports.push(`import { TeamGrid } from "@/components/sections/team";`);
-    sections.push(`      <TeamGrid
-        heading="Our Leadership"
-        members={[
-          // TODO: Replace with real team members or fetch from content provider
-          // { name: "Name", role: "Role", image: { src: "/placeholders/avatar.svg", alt: "..." }, order: 1 },
-        ]}
-        columns={4}
-      />`);
-  }
-
-  // CTA
-  imports.push(`import { CtaCentered } from "@/components/sections/cta";`);
-  sections.push(`      <CtaCentered
-        heading="[TODO: Let's work together]"
-        description="[TODO: Professional closing statement]"
-        primaryCta={{ label: "[TODO: Contact us]", href: "${pages.contact ? "/contact" : "#"}" }}
-      />`);
-
-  return buildPage(imports, sections);
-}
-
-function homeSaas(pages: Record<string, boolean>): string {
-  const imports = [
-    `import type { Metadata } from "next";`,
-    `import { createMetadata, siteConfig } from "@/lib/metadata";`,
-    `import { HeroCentered } from "@/components/sections/hero";`,
-    `import { LogoCloud } from "@/components/sections/social-proof";`,
-  ];
-  const sections: string[] = [];
-
-  // Hero
-  sections.push(`      <HeroCentered
-        heading="[TODO: Product headline — what it does]"
-        subheading="[TODO: Who it's for and the key benefit]"
-        primaryCta={{ label: "[TODO: Start free trial]", href: "#" }}
-        secondaryCta={{ label: "[TODO: See demo]", href: "#" }}
-        badge="[TODO: Launch badge or social proof]"
-      />`);
-
-  // Logo cloud
-  sections.push(`      <LogoCloud
-        heading="[TODO: Trusted by 1,000+ teams]"
-        logos={[
-          // TODO: Add customer logos
-          // { src: "/logos/company.svg", alt: "Company Name" },
-        ]}
-      />`);
-
-  // Features
-  imports.push(`import { FeaturesGrid } from "@/components/sections/features";`);
-  sections.push(`      <FeaturesGrid
-        heading="[TODO: Everything you need]"
-        subheading="[TODO: Platform capabilities overview]"
-        features={[
-          // TODO: Replace with real product features
-          { icon: "Zap", title: "[Feature 1]", description: "[TODO: Description]" },
-          { icon: "Lock", title: "[Feature 2]", description: "[TODO: Description]" },
-          { icon: "BarChart3", title: "[Feature 3]", description: "[TODO: Description]" },
-          { icon: "Globe", title: "[Feature 4]", description: "[TODO: Description]" },
-          { icon: "Layers", title: "[Feature 5]", description: "[TODO: Description]" },
-          { icon: "RefreshCw", title: "[Feature 6]", description: "[TODO: Description]" },
-        ]}
-        columns={3}
-      />`);
-
-  // Pricing
-  if (pages.pricing) {
-    imports.push(`import { PricingCards } from "@/components/sections/pricing";`);
-    sections.push(`      <PricingCards
-        plans={[
-          // TODO: Replace with real pricing plans
-          {
-            name: "Starter",
-            price: "[TODO]",
-            period: "month",
-            description: "[TODO: Who this plan is for]",
-            features: ["[Feature 1]", "[Feature 2]", "[Feature 3]"],
-            cta: { label: "Get started", href: "#" },
-          },
-          {
-            name: "Pro",
-            price: "[TODO]",
-            period: "month",
-            description: "[TODO: Who this plan is for]",
-            features: ["[Feature 1]", "[Feature 2]", "[Feature 3]", "[Feature 4]"],
-            cta: { label: "Get started", href: "#" },
-            popular: true,
-          },
-          {
-            name: "Enterprise",
-            price: "[TODO]",
-            period: "month",
-            description: "[TODO: Who this plan is for]",
-            features: ["[Feature 1]", "[Feature 2]", "[Feature 3]", "[Feature 4]", "[Feature 5]"],
-            cta: { label: "Contact sales", href: "${pages.contact ? "/contact" : "#"}" },
-          },
-        ]}
-      />`);
-  }
-
-  // FAQ
-  imports.push(`import { FaqSection } from "@/components/sections/faq";`);
-  sections.push(`      <FaqSection
-        heading="Frequently Asked Questions"
-        faqs={[
-          // TODO: Replace with real FAQs or fetch from content provider
-          { question: "[TODO: Question 1]", answer: "[TODO: Answer 1]", order: 1 },
-          { question: "[TODO: Question 2]", answer: "[TODO: Answer 2]", order: 2 },
-          { question: "[TODO: Question 3]", answer: "[TODO: Answer 3]", order: 3 },
-        ]}
-      />`);
-
-  // CTA
-  imports.push(`import { CtaCentered } from "@/components/sections/cta";`);
-  sections.push(`      <CtaCentered
-        heading="[TODO: Ready to scale?]"
-        description="[TODO: Free trial / demo invitation]"
-        primaryCta={{ label: "[TODO: Start free trial]", href: "#" }}
-        secondaryCta={{ label: "[TODO: Talk to sales]", href: "${pages.contact ? "/contact" : "#"}" }}
-        variant="gradient"
-      />`);
-
-  return buildPage(imports, sections);
-}
-
-function homeLanding(pages: Record<string, boolean>): string {
-  const imports = [
-    `import type { Metadata } from "next";`,
-    `import { createMetadata, siteConfig } from "@/lib/metadata";`,
-    `import { HeroCentered } from "@/components/sections/hero";`,
-  ];
-  const sections: string[] = [];
-
-  // Hero — full height, single focus
-  sections.push(`      <HeroCentered
-        heading="[TODO: Bold headline — one big promise]"
-        subheading="[TODO: Supporting proof or stat]"
-        primaryCta={{ label: "[TODO: Single CTA]", href: "${pages.contact ? "/contact" : "#"}" }}
-        fullHeight
-      />`);
-
-  // Features
-  imports.push(`import { FeaturesGrid } from "@/components/sections/features";`);
-  sections.push(`      <FeaturesGrid
-        heading="[TODO: How it works / Key benefits]"
-        features={[
-          // TODO: Replace with real benefits
-          { icon: "CheckCircle", title: "[Benefit 1]", description: "[TODO: Description]" },
-          { icon: "CheckCircle", title: "[Benefit 2]", description: "[TODO: Description]" },
-          { icon: "CheckCircle", title: "[Benefit 3]", description: "[TODO: Description]" },
-        ]}
-        columns={3}
-      />`);
-
-  // Testimonials
-  imports.push(`import { TestimonialsGrid } from "@/components/sections/social-proof";`);
-  sections.push(`      <TestimonialsGrid
-        heading="What People Are Saying"
-        testimonials={[
-          // TODO: Replace with real testimonials
-          // { name: "Name", role: "Role", company: "Company", quote: "...", featured: true },
-        ]}
-        columns={2}
-      />`);
-
-  // CTA — dark variant for urgency
-  imports.push(`import { CtaCentered } from "@/components/sections/cta";`);
-  sections.push(`      <CtaCentered
-        heading="[TODO: Don't miss out — final CTA]"
-        description="[TODO: Urgency or scarcity statement]"
-        primaryCta={{ label: "[TODO: CTA label]", href: "${pages.contact ? "/contact" : "#"}" }}
-        variant="dark"
-      />`);
-
-  return buildPage(imports, sections);
-}
-
-function buildPage(imports: string[], sections: string[]): string {
-  return `${imports.join("\n")}
+  return `import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { createMetadata, siteConfig } from "@/lib/metadata";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { AnimateOnScroll } from "@/components/animations";
 
 export const metadata: Metadata = createMetadata({
   title: \`\${siteConfig.name} — \${siteConfig.description}\`,
@@ -468,9 +159,55 @@ export const metadata: Metadata = createMetadata({
 
 export default function HomePage() {
   return (
-    <main>
-${sections.join("\n\n")}
-    </main>
+    <>
+      {/* ── Hero ── */}
+      <section className="flex min-h-[80vh] flex-col items-center justify-center px-4 py-20 text-center">
+        <AnimateOnScroll preset="fade-up">
+          <h1 className="font-heading text-(length:--text-display) font-bold leading-[1.1] tracking-tight text-foreground">
+            ${h.hero}
+          </h1>
+        </AnimateOnScroll>
+        <AnimateOnScroll preset="fade-up" delay={0.15}>
+          <p className="mt-6 max-w-2xl text-(length:--text-body-lg) text-muted-foreground">
+            [TODO: Supporting statement — what you do, who it&apos;s for, why it matters]
+          </p>
+        </AnimateOnScroll>
+        <AnimateOnScroll preset="fade-up" delay={0.3}>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+            <Link href="${contactHref}" className={cn(buttonVariants({ variant: "cta", size: "lg" }))}>
+              [TODO: Primary CTA] <ArrowRight />
+            </Link>
+            <Link href="${secondaryHref}" className={cn(buttonVariants({ variant: "outline", size: "lg" }))}>
+              [TODO: Secondary CTA]
+            </Link>
+          </div>
+        </AnimateOnScroll>
+      </section>
+
+${h.sections}
+
+      {/* ── CTA ── */}
+      <AnimateOnScroll preset="fade-up">
+        <section className="bg-muted/50 px-4 py-section">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="font-heading text-(length:--text-heading) font-bold tracking-tight text-foreground">
+              ${h.cta}
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              [TODO: Short persuasive closing statement]
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <Link href="${contactHref}" className={cn(buttonVariants({ variant: "cta", size: "lg" }))}>
+                [TODO: Get started]
+              </Link>
+              <Link href="${secondaryHref}" className={cn(buttonVariants({ variant: "outline", size: "lg" }))}>
+                [TODO: Learn more]
+              </Link>
+            </div>
+          </div>
+        </section>
+      </AnimateOnScroll>
+    </>
   );
 }
 `;

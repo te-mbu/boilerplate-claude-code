@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { createMetadata } from "@/lib/metadata";
 import { getContentProvider } from "@/lib/content";
-import { PortfolioGrid } from "@/components/sections/portfolio";
+import { AnimateOnScroll } from "@/components/animations";
 
 export const metadata: Metadata = createMetadata({
   title: "Portfolio",
-  description: "Explore our recent projects and the results we have delivered for our clients.",
+  description: "[TODO: Portfolio page description]",
   path: "/portfolio",
 });
 
@@ -14,18 +14,32 @@ export default async function PortfolioPage() {
   const projects = await content.getProjects();
 
   return (
-    <main>
-      <div className="px-4 py-12 md:py-20">
+    <>
+      {/* ── Header ── */}
+      <section className="px-4 py-12 md:py-20">
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Our Work
-          </h1>
-          <p className="mt-4 text-lg text-muted-foreground">
-            A selection of projects we are proud of.
-          </p>
+          <AnimateOnScroll preset="fade-up">
+            <h1 className="font-heading text-(length:--text-heading) font-bold tracking-tight text-foreground sm:text-4xl">
+              [TODO: Portfolio heading]
+            </h1>
+            <p className="mt-4 text-(length:--text-body-lg) text-muted-foreground">
+              [TODO: Portfolio subheading]
+            </p>
+          </AnimateOnScroll>
         </div>
-      </div>
-      <PortfolioGrid projects={projects} />
-    </main>
+      </section>
+
+      {/* ── Projects Grid ── */}
+      {/* [TODO: Compose with Card variant="interactive" + next/image + Badge for tags] */}
+      {/* Wrap grid with <StaggerChildren preset="fade-up"> for card-by-card reveal */}
+      {/* Data available in `projects` variable from content provider */}
+      {/* See examples/sections/portfolio/ for reference */}
+
+      {projects.length === 0 && (
+        <p className="px-4 pb-20 text-center text-muted-foreground">
+          No projects published yet.
+        </p>
+      )}
+    </>
   );
 }

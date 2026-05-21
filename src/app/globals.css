@@ -62,12 +62,17 @@
   --color-cta: var(--cta);
   --color-success: var(--success);
 
-  /* --- Typography --- */
+  /* --- Typography: fonts --- */
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   /* TODO: Set headingFont in client.config.ts and run pnpm setup */
   --font-heading: var(--font-sans);
   --font-serif: "Georgia", "Times New Roman", serif;
+
+  /* --- Typography: fluid sizes --- */
+  --text-display: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+  --text-heading: clamp(1.75rem, 3vw + 0.5rem, 2.5rem);
+  --text-body-lg: clamp(1.05rem, 1vw + 0.5rem, 1.25rem);
 
   /* --- Radii --- */
   --radius-sm: calc(var(--radius) * 0.6);
@@ -78,9 +83,10 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 
-  /* --- Spacing: section-level --- */
-  --spacing-section: 5rem;
-  --spacing-section-lg: 7rem;
+  /* --- Spacing: section-level (3 tiers) --- */
+  --spacing-section-sm: clamp(2.5rem, 4vw, 3.5rem);
+  --spacing-section: clamp(4rem, 7vw, 6rem);
+  --spacing-section-lg: clamp(5rem, 10vw, 8rem);
 
   /* --- Animations: marquee --- */
   --animate-marquee: marquee linear infinite;

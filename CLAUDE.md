@@ -24,8 +24,11 @@ You are building a website for [CLIENT_NAME]. Read the design system files befor
 7. design-system/decisions.md — governance rules from past reviews (HIGHEST PRIORITY)
 
 ## Rules
+- Compose pages directly with shadcn/ui primitives (Card, Button, Badge, Accordion, etc.) — do NOT import from examples/sections/
+- Use examples/sections/ as copy-paste reference patterns, not as runtime imports
 - Use existing shadcn/ui components — do not create duplicates
 - Use CSS variables from globals.css for all token values — no hardcoded colors
+- Button component uses base-ui (no asChild) — use buttonVariants() + Link for nav links
 - All GSAP code must be in "use client" components using the use-gsap hook
 - Respect prefers-reduced-motion
 - Every image must use next/image with sizes and alt props
@@ -73,7 +76,8 @@ src/app/(site)/ — all pages with shared nav+footer layout
 src/app/api/ — API routes (outside site layout)
 src/components/ui/ — shadcn/ui primitives (do not modify directly)
 src/components/layout/ — navbar, footer, breadcrumb
-src/components/sections/ — page sections (hero, features, pricing, stats, timeline, gallery, marquee, etc.)
+src/components/sections/ — functional section components (contact form, blog list/article)
+examples/sections/ — reference patterns for common sections (hero, features, pricing, etc.) — NOT imported, copy-paste only
 src/components/animations/ — scroll animation wrappers (AnimateOnScroll, StaggerChildren, CountUp)
 src/components/shared/ — SEO, GTM, cookies, utilities
 src/lib/content/ — content layer (Sanity or static)

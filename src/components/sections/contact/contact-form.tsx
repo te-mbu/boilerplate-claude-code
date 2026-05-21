@@ -30,8 +30,17 @@ export function ContactForm({ heading, description }: ContactFormProps) {
   });
 
   async function onSubmit(data: ContactFormData) {
-    // TODO: replace with server action
-    console.log("Contact form submission:", data);
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(err?.error ?? "Failed to send message");
+    }
+
     setSubmitted(true);
     reset();
   }
