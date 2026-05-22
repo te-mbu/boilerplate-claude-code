@@ -158,7 +158,7 @@ function checkComponentCompliance(file: string) {
 }
 
 // ---------------------------------------------------------------------------
-// Check: Taste Skill Anti-Patterns
+// Check: Impeccable Anti-Patterns
 // ---------------------------------------------------------------------------
 const AI_CLICHES = [
   "elevate", "seamless", "unleash", "next-gen", "game-changer",
@@ -170,7 +170,7 @@ const PLACEHOLDER_NAMES = [
   "Lorem ipsum",
 ];
 
-function checkTasteAntiPatterns(file: string) {
+function checkDesignAntiPatterns(file: string) {
   scanLines(file, (line, num) => {
     const trimmed = line.trim();
     // Skip comments and imports
@@ -299,7 +299,7 @@ function main() {
     if (isTsx) {
       checkDesignTokens(file);
       checkComponentCompliance(file);
-      checkTasteAntiPatterns(file);
+      checkDesignAntiPatterns(file);
       checkArchitecture(file);
       checkPerformance(file);
     }

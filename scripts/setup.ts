@@ -135,7 +135,7 @@ async function main() {
   // --- 2. Update package.json ---
   console.log("📦 Updating package.json...");
   replaceInFile("package.json", [
-    ["terence-nextjs-boilerplate", config.slug],
+    [/"name": "[^"]*"/, `"name": "${config.slug}"`],
   ]);
 
   // --- 3. Update CLAUDE.md (regex for idempotent re-runs) ---
