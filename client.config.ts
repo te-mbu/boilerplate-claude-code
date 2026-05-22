@@ -22,7 +22,7 @@ const config: ClientConfig = {
   // --- Locale & CMS ---
   locale: "fr", // "fr" | "en" | "fr+en"
   cms: "static", // "sanity" | "static"
-  siteType: "marketing", // "landing" | "marketing" | "corporate" | "portfolio" | "saas" | "engine"
+  siteType: "marketing", // "landing" | "marketing" | "corporate" | "portfolio" | "saas"
 
   // --- Theme ---
   theme: {
@@ -47,7 +47,6 @@ const config: ClientConfig = {
     changelog: false,
     contact: true,
     legal: true, // privacy + terms + mentions-legales
-    engine: false, // diagnostic + chatbot
   },
 
   // --- Features ---

@@ -8,7 +8,7 @@ export interface ClientConfig {
   serifFont: string;
   locale: "fr" | "en" | "fr+en";
   cms: "sanity" | "static";
-  siteType: "landing" | "marketing" | "corporate" | "portfolio" | "saas" | "engine";
+  siteType: "landing" | "marketing" | "corporate" | "portfolio" | "saas";
 
   theme: {
     primary: string;
@@ -30,7 +30,6 @@ export interface ClientConfig {
     changelog: boolean;
     contact: boolean;
     legal: boolean;
-    engine: boolean;
   };
 
   features: {

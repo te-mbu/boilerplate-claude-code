@@ -66,90 +66,11 @@ function replaceInFile(relativePath: string, replacements: [string | RegExp, str
 }
 
 // =============================================================================
-// Home page templates by siteType — compose with shadcn primitives
+// Home page — blank canvas, composed from scratch per client
 // =============================================================================
-function generateHomePage(
-  siteType: string,
-  pages: Record<string, boolean>,
-): string {
-  const contactHref = pages.contact ? "/contact" : "#";
-  const secondaryHref = pages.services ? "/services" : (pages.about ? "/about" : "#");
-
-  // Customize hero and section hints per siteType
-  const hints: Record<string, { hero: string; sections: string; cta: string }> = {
-    portfolio: {
-      hero: `[TODO: Studio tagline]`,
-      sections: `      {/* [TODO: Selected Work — compose with Card variant="interactive" + next/image] */}
-      {/* Wrap grid with <StaggerChildren preset="fade-up"> */}
-      {/* See examples/sections/portfolio/ for reference */}
-
-      {/* [TODO: Testimonials — compose with Card + blockquote] */}
-      {/* Wrap with <AnimateOnScroll preset="fade-up"> */}
-      {/* See examples/sections/social-proof/ for reference */}`,
-      cta: `[TODO: Have a project in mind?]`,
-    },
-    marketing: {
-      hero: `[TODO: Main value proposition]`,
-      sections: `      {/* [TODO: Social proof — logo cloud with flex/grid + next/image] */}
-      {/* Wrap with <StaggerChildren preset="fade-in"> */}
-      {/* See examples/sections/social-proof/logo-cloud.tsx for reference */}
-
-      {/* [TODO: Features/services grid — compose with Card, CardHeader, CardTitle, CardDescription] */}
-      {/* Wrap grid with <StaggerChildren preset="fade-up"> for card-by-card reveal */}
-      {/* See examples/sections/features/ for reference */}
-
-      {/* [TODO: Testimonials — compose with Card + blockquote] */}
-      {/* Wrap with <AnimateOnScroll preset="fade-up"> */}
-      {/* See examples/sections/social-proof/ for reference */}`,
-      cta: `[TODO: Ready to get started?]`,
-    },
-    corporate: {
-      hero: `[TODO: Corporate headline]`,
-      sections: `      {/* [TODO: Key strengths grid — compose with Card + Lucide icons, 4 columns] */}
-      {/* See examples/sections/features/ for reference */}
-
-      {/* [TODO: Client success stories — compose with Card + blockquote] */}
-      {/* See examples/sections/social-proof/ for reference */}
-
-      {/* [TODO: Leadership team — compose with Card + Avatar + next/image] */}
-      {/* See examples/sections/team/ for reference */}`,
-      cta: `[TODO: Let's work together]`,
-    },
-    saas: {
-      hero: `[TODO: Product headline — what it does]`,
-      sections: `      {/* [TODO: Logo cloud — trusted by X teams] */}
-      {/* See examples/sections/social-proof/logo-cloud.tsx for reference */}
-
-      {/* [TODO: Product features grid — compose with Card + icons, 3x2 grid] */}
-      {/* See examples/sections/features/ for reference */}
-
-      {/* [TODO: Pricing cards — compose with Card + Badge("popular") + Button CTA] */}
-      {/* See examples/sections/pricing/ for reference */}
-
-      {/* [TODO: FAQ — compose with Accordion component] */}
-      {/* See examples/sections/faq/ for reference */}`,
-      cta: `[TODO: Ready to scale?]`,
-    },
-    landing: {
-      hero: `[TODO: Bold headline — one big promise]`,
-      sections: `      {/* [TODO: Key benefits — compose with Card, 3 columns] */}
-      {/* See examples/sections/features/ for reference */}
-
-      {/* [TODO: Social proof — compose with Card + blockquote] */}
-      {/* See examples/sections/social-proof/ for reference */}`,
-      cta: `[TODO: Don't miss out — final CTA]`,
-    },
-  };
-
-  const h = hints[siteType] ?? hints.marketing;
-
+function generateHomePage(): string {
   return `import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { createMetadata, siteConfig } from "@/lib/metadata";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { AnimateOnScroll } from "@/components/animations";
 
 export const metadata: Metadata = createMetadata({
   title: \`\${siteConfig.name} — \${siteConfig.description}\`,
@@ -160,53 +81,8 @@ export const metadata: Metadata = createMetadata({
 export default function HomePage() {
   return (
     <>
-      {/* ── Hero ── */}
-      <section className="flex min-h-[80vh] flex-col items-center justify-center px-4 py-20 text-center">
-        <AnimateOnScroll preset="fade-up">
-          <h1 className="font-heading text-(length:--text-display) font-bold leading-[1.1] tracking-tight text-foreground">
-            ${h.hero}
-          </h1>
-        </AnimateOnScroll>
-        <AnimateOnScroll preset="fade-up" delay={0.15}>
-          <p className="mt-6 max-w-2xl text-(length:--text-body-lg) text-muted-foreground">
-            [TODO: Supporting statement — what you do, who it&apos;s for, why it matters]
-          </p>
-        </AnimateOnScroll>
-        <AnimateOnScroll preset="fade-up" delay={0.3}>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Link href="${contactHref}" className={cn(buttonVariants({ variant: "cta", size: "lg" }))}>
-              [TODO: Primary CTA] <ArrowRight />
-            </Link>
-            <Link href="${secondaryHref}" className={cn(buttonVariants({ variant: "outline", size: "lg" }))}>
-              [TODO: Secondary CTA]
-            </Link>
-          </div>
-        </AnimateOnScroll>
-      </section>
-
-${h.sections}
-
-      {/* ── CTA ── */}
-      <AnimateOnScroll preset="fade-up">
-        <section className="bg-muted/50 px-4 py-section">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="font-heading text-(length:--text-heading) font-bold tracking-tight text-foreground">
-              ${h.cta}
-            </h2>
-            <p className="mt-4 text-muted-foreground">
-              [TODO: Short persuasive closing statement]
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-              <Link href="${contactHref}" className={cn(buttonVariants({ variant: "cta", size: "lg" }))}>
-                [TODO: Get started]
-              </Link>
-              <Link href="${secondaryHref}" className={cn(buttonVariants({ variant: "outline", size: "lg" }))}>
-                [TODO: Learn more]
-              </Link>
-            </div>
-          </div>
-        </section>
-      </AnimateOnScroll>
+      {/* Page blanche — compose each section from scratch using the taste skill + shadcn/ui primitives. */}
+      {/* Read .claude/skills/taste/SKILL.md and design-system/client-brief.md before building. */}
     </>
   );
 }
@@ -228,33 +104,25 @@ async function main() {
   console.log(`   Site type: ${config.siteType}`);
   console.log("");
 
-  // --- 1. Update metadata.ts ---
+  // --- 1. Update metadata.ts (regex-based for idempotent re-runs) ---
   console.log("📝 Updating metadata...");
   replaceInFile("src/lib/metadata.ts", [
-    ['"[CLIENT_NAME]"', `"${config.name}"`],
-    [`"[CLIENT_NAME]"`, `"${config.name}"`],
-    ['"https://example.com"', `"${config.url}"`],
-    [`"https://example.com"`, `"${config.url}"`],
-    ['"[CLIENT_NAME] — [tagline]"', `"${config.name} — ${config.tagline}"`],
-    [`"[CLIENT_NAME] — [tagline]"`, `"${config.name} — ${config.tagline}"`],
-    [/locale: "fr_FR"/, `locale: "${config.locale === "en" ? "en_US" : "fr_FR"}"`],
+    [/name: "[^"]*"/, `name: "${config.name}"`],
+    [/url: "[^"]*"/, `url: "${config.url}"`],
+    [/description: "[^"]*"/, `description: "${config.name} — ${config.tagline}"`],
+    [/locale: "[^"]*"/, `locale: "${config.locale === "en" ? "en_US" : "fr_FR"}"`],
   ]);
 
-  // --- 1b. Update layout components ---
+  // --- 1b. Update layout components (regex for idempotent re-runs) ---
   console.log("🧩 Updating layout components...");
-  replaceInFile("src/components/layout/navbar.tsx", [
-    ['"[CLIENT_NAME]"', `"${config.name}"`],
-    [`"[CLIENT_NAME]"`, `"${config.name}"`],
-  ]);
+  const brandNameRegex: [RegExp, string] = [/brandName = "[^"]*"/, `brandName = "${config.name}"`];
+  replaceInFile("src/components/layout/navbar.tsx", [brandNameRegex]);
   for (const footerFile of [
     "src/components/layout/footer.tsx",
     "src/components/layout/footer-marketing.tsx",
     "src/components/layout/footer-minimal.tsx",
   ]) {
-    replaceInFile(footerFile, [
-      ['"[CLIENT_NAME]"', `"${config.name}"`],
-      [`"[CLIENT_NAME]"`, `"${config.name}"`],
-    ]);
+    replaceInFile(footerFile, [brandNameRegex]);
   }
 
   // --- 1c. Update html lang attribute ---
@@ -270,21 +138,15 @@ async function main() {
     ["terence-nextjs-boilerplate", config.slug],
   ]);
 
-  // --- 3. Update CLAUDE.md ---
+  // --- 3. Update CLAUDE.md (regex for idempotent re-runs) ---
   console.log("📋 Updating CLAUDE.md...");
   replaceInFile("CLAUDE.md", [
-    ["[CLIENT_NAME]", config.name],
+    [/^# .+ — Project CLAUDE\.md/m, `# ${config.name} — Project CLAUDE.md`],
+    [/You are building a website for .+\. Read/, `You are building a website for ${config.name}. Read`],
     [/## Site Type:.*/, `## Site Type: ${config.siteType}`],
     [/## Locale:.*/, `## Locale: ${config.locale}`],
     [/## CMS:.*/, `## CMS: ${config.cms}`],
   ]);
-  // Remove engine references from CLAUDE.md if engine is disabled
-  if (!config.pages.engine) {
-    replaceInFile("CLAUDE.md", [
-      [/src\/components\/engine\/.*\n/g, ""],
-      [",engine", ""],
-    ]);
-  }
 
   // --- 4. Setup .env.local ---
   console.log("🔐 Setting up .env.local...");
@@ -314,8 +176,11 @@ async function main() {
   ].join("\n") + "\n";
   writeFile(".env.local", envContent);
 
-  // --- 5. Remove disabled pages ---
-  console.log("📄 Cleaning up disabled pages...");
+  // --- 5. Remove disabled pages + clean template pages ---
+  // All pages except home are created on demand (page blanche philosophy).
+  // Disabled pages are deleted entirely. Enabled pages with TODO content are also
+  // deleted — they'll be composed from scratch when the dev is ready.
+  console.log("📄 Cleaning up pages...");
   const pageMap: Record<string, string[]> = {
     about: ["src/app/(site)/about"],
     services: ["src/app/(site)/services"],
@@ -329,33 +194,34 @@ async function main() {
     legal: [
       "src/app/(site)/legal",
     ],
-    engine: [
-      "src/app/(site)/engine",
-      "src/components/engine",
-    ],
   };
 
   for (const [page, dirs] of Object.entries(pageMap)) {
     if (!config.pages[page as keyof typeof config.pages]) {
+      // Page disabled — remove entirely
       for (const dir of dirs) {
         removeDir(dir);
+      }
+    } else {
+      // Page enabled — remove template TODO content so it's built from scratch
+      for (const dir of dirs) {
+        const pagePath = path.join(dir, "page.tsx");
+        if (fileExists(pagePath)) {
+          const content = readFile(pagePath);
+          if (content.includes("[TODO:")) {
+            // Remove silently (removeDir logs its own message), then add context
+            const full = path.join(ROOT, dir);
+            if (fs.existsSync(full)) {
+              fs.rmSync(full, { recursive: true });
+            }
+            console.log(`  🧹 Cleaned ${dir} (template — will be composed from scratch)`);
+          }
+        }
       }
     }
   }
 
-  // --- 5a. Select footer template based on siteType ---
-  console.log("🦶 Selecting footer template based on siteType...");
-  const minimalFooterTypes = ["portfolio", "corporate", "landing"];
-  const footerTemplate = minimalFooterTypes.includes(config.siteType)
-    ? "src/components/layout/footer-minimal.tsx"
-    : "src/components/layout/footer-marketing.tsx";
-  if (fileExists(footerTemplate)) {
-    const templateContent = readFile(footerTemplate);
-    writeFile("src/components/layout/footer.tsx", templateContent);
-    console.log(`  📋 Copied ${footerTemplate} → footer.tsx`);
-  }
-
-  // --- 5b. Update navbar links — remove disabled pages ---
+  // --- 5a. Update navbar links — remove disabled pages ---
   console.log("🧭 Updating navbar links...");
   const navPageHrefMap: Record<string, string> = {
     services: "/services",
@@ -389,7 +255,6 @@ async function main() {
     blog: ["/blog"],
     contact: ["/contact"],
     changelog: ["/changelog"],
-    engine: ["/engine/diagnostic"],
   };
 
   const footerFiles = [
@@ -690,9 +555,9 @@ async function main() {
     console.log("    src/lib/sanity/image.ts");
   }
 
-  // --- 9. Generate starter home page based on siteType ---
-  console.log("🏠 Generating home page for siteType:", config.siteType, "...");
-  const homePage = generateHomePage(config.siteType, config.pages);
+  // --- 9. Generate blank home page ---
+  console.log("🏠 Generating home page...");
+  const homePage = generateHomePage();
   writeFile("src/app/(site)/page.tsx", homePage);
 
   console.log("");
