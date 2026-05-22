@@ -1,6 +1,6 @@
 ---
 name: audit
-description: Audit the project for design system compliance, design quality, conversion structure, animation coverage, SEO, code quality, and taste skill anti-patterns. Extracts boilerplate improvement proposals from session friction. Run at the start of a session or before delivery.
+description: Audit the project for design system compliance, design quality, conversion structure, animation coverage, SEO, code quality, and impeccable anti-patterns. Extracts boilerplate improvement proposals from session friction. Run at the start of a session or before delivery.
 ---
 
 # Project Audit
@@ -49,7 +49,7 @@ After both phases, Claude appends the `=== DESIGN QUALITY ===`, `=== CONVERSION 
 | `asChild` on Button | Not supported on base-ui Button — use `buttonVariants() + Link` | Error |
 | Direct `fetch()` in pages | Must go through content layer | Warning |
 
-### 3. Taste Skill Anti-Patterns (from taste SKILL.md Section 7)
+### 3. Design Anti-Patterns (from impeccable shared design laws + absolute bans)
 
 | Check | Rule | Severity |
 |-------|------|----------|
@@ -72,7 +72,7 @@ After both phases, Claude appends the `=== DESIGN QUALITY ===`, `=== CONVERSION 
 | `[TODO:` in code | Unresolved template placeholders | Warning |
 | `[CLIENT_NAME]` remaining | Setup not run or incomplete | Error |
 
-### 5. Performance (from taste SKILL.md Section 5)
+### 5. Performance (from impeccable motion laws + CLAUDE.md)
 
 | Check | Rule | Severity |
 |-------|------|----------|
@@ -81,7 +81,7 @@ After both phases, Claude appends the `=== DESIGN QUALITY ===`, `=== CONVERSION 
 | Missing `aria-hidden` on decorative SVGs | Decorative elements need `aria-hidden="true"` | Info |
 | Lenis not initialized | `smoothScroll: true` in config but no Lenis instance created in layout/provider | Warning |
 
-### 6. Design Quality (Claude-driven — from CONTEXT.md + taste skill)
+### 6. Design Quality (Claude-driven — from CONTEXT.md + impeccable)
 
 These checks require reading and understanding the actual page composition. Claude performs them after the static scan.
 
@@ -92,7 +92,7 @@ Read `design-system/client-brief.md`. If it still contains `[e.g.,` placeholders
 | Check | Rule | Severity |
 |-------|------|----------|
 | Brief not filled | `client-brief.md` contains placeholder text (`[e.g.,`, empty fields) | Error |
-| Missing brand personality | Brand personality section empty — needed for taste skill dial calibration | Warning |
+| Missing brand personality | Brand personality section empty — needed for impeccable register calibration | Warning |
 | Missing conversion goals | Primary CTA and success metric not defined | Warning |
 
 **6b. Taste Skill Dial Compliance**

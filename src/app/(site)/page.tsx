@@ -10,8 +10,8 @@ export const metadata: Metadata = createMetadata({
 export default function HomePage() {
   return (
     <>
-      {/* Page blanche — compose each section from scratch using the taste skill + shadcn/ui primitives. */}
-      {/* Read .claude/skills/taste/SKILL.md and design-system/client-brief.md before building. */}
+      {/* Page blanche — compose each section from scratch using impeccable design laws + shadcn/ui primitives. */}
+      {/* Run /impeccable teach to set up PRODUCT.md, then read design-system/client-brief.md before building. */}
     </>
   );
 }

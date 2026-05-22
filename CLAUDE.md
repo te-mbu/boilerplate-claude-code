@@ -6,7 +6,7 @@ You are building a website for [CLIENT_NAME]. Read the design system files befor
 ## Architecture
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS 4 + pnpm
 - UI primitives: shadcn/ui (src/components/ui/) — do NOT create duplicates
-- Design intelligence: taste skill (.claude/skills/taste/) — READ before building any UI
+- Design intelligence: impeccable skill (.claude/skills/impeccable/) — READ before building any UI
 - Custom components: src/components/{layout,sections,shared}/
 - Animations: GSAP + Lenis smooth scroll (client-only, use-gsap hook, respect prefers-reduced-motion)
 - CMS: Content layer abstraction (src/lib/content/) — toggle via CONTENT_PROVIDER env
@@ -24,10 +24,10 @@ You are building a website for [CLIENT_NAME]. Read the design system files befor
 7. design-system/decisions.md — governance rules from past reviews (HIGHEST PRIORITY)
 
 ## Composition Philosophy — "Page Blanche"
-Every section is composed from scratch for each client. Once the brief and design tokens are set, build section by section using the taste skill rules + shadcn/ui primitives. Never start from pre-built templates — each section is a unique response to the client's identity, content, and conversion goals.
+Every section is composed from scratch for each client. Once the brief and design tokens are set, build section by section using impeccable's design laws + shadcn/ui primitives. Never start from pre-built templates — each section is a unique response to the client's identity, content, and conversion goals.
 
 ## Rules
-- **Page blanche**: compose every section from scratch using taste skill + shadcn/ui primitives — never from pre-built components
+- **Page blanche**: compose every section from scratch using impeccable design laws + shadcn/ui primitives — never from pre-built components
 - examples/sections/ exists as loose inspiration only — do NOT import, do NOT copy-paste verbatim
 - Use existing shadcn/ui components — do not create duplicates
 - Use CSS variables from globals.css for all token values — no hardcoded colors
@@ -40,22 +40,21 @@ Every section is composed from scratch for each client. Once the brief and desig
 - params and searchParams are Promises in Next.js 15+ — always await
 - 1-3 tasks at a time. Show result before continuing.
 
-## Design Intelligence — taste skill + shadcn/ui
+## Design Intelligence — impeccable + shadcn/ui
 
 BEFORE building any UI (new page, new section, new component), follow this process:
 
-### Step 1: Read the taste skill
-Read `.claude/skills/taste/SKILL.md` to internalize the design engineering rules (bias correction, typography, color, layout, motion, forbidden patterns).
+### Step 1: Load impeccable context
+Run `node .claude/skills/impeccable/scripts/load-context.mjs` to load PRODUCT.md and DESIGN.md. If PRODUCT.md is missing, run `/impeccable teach` first.
 
-### Step 2: Check the dials
-The taste skill has 3 dials (DESIGN_VARIANCE, MOTION_INTENSITY, VISUAL_DENSITY) at baseline (8, 6, 4). Adjust based on the client brief and user requests. These dials drive layout, animation, and spacing decisions.
+### Step 2: Identify the register
+Determine if the task is **brand** (marketing, landing, portfolio — design IS the product) or **product** (app UI, dashboard — design SERVES the product). Load the matching register reference.
 
-### Step 3: Build with shadcn/ui primitives
-Compose UI using existing shadcn components (Button, Card, Badge, Separator, Accordion, etc.).
-The taste skill provides the "what" (rules, anti-patterns, creative arsenal) — shadcn provides the "how" (accessible components).
+### Step 3: Build with impeccable + shadcn/ui
+Follow impeccable's shared design laws (color, typography, layout, motion, absolute bans) and compose with shadcn/ui primitives (Button, Card, Badge, Separator, Accordion, etc.). Use `/impeccable craft` for end-to-end feature builds, `/impeccable shape` to plan before coding.
 
-### Step 4: Run the pre-flight check
-Before delivering, run through Section 9 (Pre-Flight Check) of the taste skill.
+### Step 4: Refine and deliver
+Use impeccable commands as needed: `/impeccable bolder`, `/impeccable quieter`, `/impeccable polish`, `/impeccable critique`. Run `/impeccable audit` before delivering.
 
 ## File Structure
 src/app/(site)/ — all pages with shared nav+footer layout
@@ -104,7 +103,7 @@ The developer sends a screenshot + HTML/CSS from another site to adapt for the c
 
 **Rules:**
 - Always read `design-system/client-brief.md` first to understand the client's visual identity
-- Read the taste skill's Creative Arsenal (Section 8) for pattern ideas
+- Use `/impeccable shape` to explore pattern ideas from the register reference
 - NEVER copy colors, fonts, or spacing from the inspiration — adapt everything to the project's design tokens from `globals.css`
 - Compose the section from scratch with shadcn/ui primitives, using the screenshot as directional inspiration only
 - Save the original screenshot in `references/` for future reference
@@ -134,13 +133,13 @@ The developer provides a brief, wireframe, or Figma and wants a full page built.
 
 **Rules:**
 1. Read `design-system/client-brief.md` and `design-system/patterns.md` before starting
-2. Read the taste skill — check which DESIGN_VARIANCE / MOTION_INTENSITY / VISUAL_DENSITY fits the page type
+2. Load impeccable context and identify the register (brand vs product)
 3. Create the route in `src/app/(site)/`
 4. Export `generateMetadata` with unique title + description
-5. Compose each section from scratch with shadcn/ui primitives, guided by taste skill rules — do not start from templates
+5. Compose each section from scratch with shadcn/ui primitives, guided by impeccable design laws — do not start from templates
 6. Use shadcn/ui primitives (Card, Button, Badge, Separator, Accordion, etc.) as building blocks
 7. Follow the SITE conversion pattern from `design-system/patterns.md` (Hook → Value → Proof → CTA)
-8. Run the taste skill's Pre-Flight Check (Section 9) before delivering
+8. Run `/impeccable critique` or `/impeccable audit` before delivering
 9. Test at 375px, 768px, 1440px mentally (or flag if unsure about responsive behavior)
 10. Add the page to `sitemap.ts` static pages array
 
@@ -149,8 +148,8 @@ The developer runs Lighthouse, checks accessibility, fixes responsive issues.
 
 **Rules:**
 - Follow `design-system/checklist.md` item by item
-- Run the taste skill's Pre-Flight Check (Section 9) as a validation pass
-- Check taste skill Section 5 (Performance Guardrails) for any performance concern
+- Run `/impeccable polish` as a final quality pass
+- Run `/impeccable audit` for technical quality checks (a11y, perf, responsive)
 - Fix issues in order of impact: performance > accessibility > SEO > cosmetic
 - Do not refactor working code while fixing issues — separate concerns
 - Report each fix individually so the developer can track progress
@@ -161,7 +160,7 @@ The developer runs Lighthouse, checks accessibility, fixes responsive issues.
 1. Edit `client.config.ts` with client details (name, colors, pages, features)
 2. Run `pnpm setup` to apply configuration across the project
 3. Fill `design-system/client-brief.md` with brand context
-4. Read the taste skill and apply design direction based on the brief
+4. Run `/impeccable teach` to set up PRODUCT.md and DESIGN.md from the brief
 5. Record design decisions in `design-system/decisions.md`
 6. Run `pnpm dev` and start building
 

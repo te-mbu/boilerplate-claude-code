@@ -98,9 +98,9 @@ Le boilerplate doit rendre les etapes 1-3 quasi-instantanees pour que tu passes 
 
 Le boilerplate ne contient PAS de sections pre-faites a assembler. Chaque section de chaque site est composee from scratch, guidee par :
 
-1. **Le brief client** (`design-system/client-brief.md`) — qui est le client, quelle personnalite, quel objectif
-2. **Les design tokens** (`globals.css`) — couleurs, typo, spacing, radius calibres pour le client
-3. **Le taste skill** (`.claude/skills/taste/SKILL.md`) — regles de design engineering, anti-patterns, arsenal creatif
+1. **Le brief client** (`PRODUCT.md` + `design-system/client-brief.md`) — qui est le client, quelle personnalite, quel objectif
+2. **Les design tokens** (`DESIGN.md` + `globals.css`) — couleurs, typo, spacing, radius calibres pour le client
+3. **Le skill impeccable** (`.claude/skills/impeccable/`) — design laws, anti-patterns, commandes de design (craft, shape, critique, polish, bolder, etc.)
 4. **Les primitives shadcn/ui** — Button, Card, Badge, Separator, Accordion... comme briques de base
 
 Le dossier `examples/sections/` existe comme inspiration lointaine, mais on n'importe jamais, on ne copie-colle jamais. Chaque section est une reponse unique au client.
@@ -109,27 +109,29 @@ Le dossier `examples/sections/` existe comme inspiration lointaine, mais on n'im
 
 ---
 
-## Le taste skill — Moteur creatif
+## Impeccable — Moteur creatif
 
-Le taste skill a 3 dials qui pilotent toutes les decisions visuelles :
+Le skill impeccable est le moteur de design intelligence du boilerplate. C'est un systeme complet avec :
 
-| Dial | Baseline | Effet |
-|------|----------|-------|
-| DESIGN_VARIANCE (1-10) | 8 | 1=symetrique/previsible, 10=asymetrique/masonry/chaos |
-| MOTION_INTENSITY (1-10) | 6 | 1=statique, 10=choreographie scroll complexe |
-| VISUAL_DENSITY (1-10) | 4 | 1=art gallery/aerien, 10=cockpit/dense |
+**Deux registres :**
+- **Brand** (marketing, landing, portfolio) — le design EST le produit
+- **Product** (app UI, dashboard) — le design SERT le produit
 
-**Ajustement par type de projet :**
+**Contexte projet via deux fichiers racine :**
+- `PRODUCT.md` — register, users, brand personality, anti-references, design principles
+- `DESIGN.md` — couleurs, typo, components, layout (genere depuis le code existant)
 
-| Type | VARIANCE | MOTION | DENSITY | Vibe |
-|------|----------|--------|---------|------|
-| Portfolio creatif | 9 | 8 | 3 | Awwwards, art direction, mouvement |
-| Site vitrine | 7 | 5 | 4 | Pro, elegant, pas ennuyeux |
-| Landing page | 6 | 6 | 5 | Focus conversion, preuves, urgence |
-| Corporate | 5 | 4 | 5 | Sobre, credible, structure |
-| Blog / media | 6 | 3 | 6 | Lisible, fonctionnel, typographie |
+**23 commandes de design :**
+| Categorie | Commandes | Usage |
+|-----------|-----------|-------|
+| Build | `craft`, `shape`, `teach`, `document`, `extract` | Construire et planifier |
+| Evaluate | `critique`, `audit` | Evaluer la qualite |
+| Refine | `polish`, `bolder`, `quieter`, `distill`, `harden`, `onboard` | Affiner le design |
+| Enhance | `animate`, `colorize`, `typeset`, `layout`, `delight`, `overdrive` | Enrichir |
+| Fix | `clarify`, `adapt`, `optimize` | Corriger |
+| Iterate | `live` | Iteration visuelle en live |
 
-Ces valeurs sont un point de depart — le dev les ajuste selon le brief.
+**Design laws partagees :** OKLCH colors, no pure black/white, varied spacing, card restraint, exponential easing, absolute bans (side-stripes, gradient text, glassmorphism by default, hero-metric template, identical card grids, modal-first).
 
 ---
 
@@ -159,7 +161,7 @@ Les artifacts sont des micro-UIs animees qui donnent vie aux sections. Ils trans
 
 Le design se fait en live dans le browser. Pas de Figma, pas de maquettes pre-approuvees. Le cycle :
 
-1. **Claude Code compose** une section from scratch (taste skill + tokens + brief)
+1. **Claude Code compose** une section from scratch (impeccable design laws + tokens + brief)
 2. **Le dev regarde** dans le browser (localhost)
 3. **Le dev donne du feedback** en langage naturel : "plus bold", "decale a gauche", "ajoute du mouvement ici", "les cards sont trop generiques"
 4. **Claude Code ajuste** directement le code — pas de nouveau fichier, modification in-place

@@ -3,7 +3,7 @@
  * Project Audit Script
  * ====================
  * Scans the codebase against the project's design system rules,
- * taste skill anti-patterns, and CLAUDE.md conventions.
+ * impeccable anti-patterns, and CLAUDE.md conventions.
  *
  * Usage: pnpm audit:project
  */
@@ -205,7 +205,7 @@ function checkTasteAntiPatterns(file: string) {
 
     // Purple AI aesthetic
     if (/(?:text|bg|border|from|to)-(?:purple|violet|fuchsia)-\d+/.test(line)) {
-      addViolation("warning", file, `Purple/violet color — AI aesthetic banned by taste skill`, num);
+      addViolation("warning", file, `Purple/violet color — AI aesthetic banned by impeccable design laws`, num);
     }
   });
 }

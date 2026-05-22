@@ -141,7 +141,7 @@ function parseBrief(): BriefData {
 }
 
 // =============================================================================
-// Recommendation builders (baseline defaults — Claude refines via taste skill)
+// Recommendation builders (baseline defaults — Claude refines via impeccable)
 // =============================================================================
 function getColorRecommendation(_brief: BriefData): ColorPalette {
   return {
@@ -425,7 +425,7 @@ function applyProposal(proposal: DesignProposal): void {
 - **Typography:** ${headingFont || "system default"} (heading) — ${proposal.typography.mood}
 - **Radius:** ${proposal.radius} | **Spacing:** ${proposal.spacing} | **Shadows:** ${proposal.shadows}
 - **Locked from client brand:** ${proposal.lockedFont ? `font: ${proposal.lockedFont}` : "none"}${proposal.lockedColors.length > 0 ? `, colors: ${proposal.lockedColors.join(", ")}` : ""}
-- **Why added:** Auto-generated baseline from client brief + taste skill. Iterate from here.
+- **Why added:** Auto-generated baseline from client brief + impeccable. Iterate from here.
 `;
 
   let decisions = fs.readFileSync(DECISIONS_MD, "utf-8");

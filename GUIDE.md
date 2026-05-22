@@ -273,7 +273,7 @@ Tu peux relancer `pnpm setup` autant de fois que nécessaire après avoir modifi
 ### Prérequis
 
 1. `design-system/client-brief.md` doit être rempli (au minimum : industry, brand personality, visual direction)
-2. Le skill `taste` doit être présent dans `.claude/skills/taste/`
+2. Le skill `impeccable` doit être présent dans `.claude/skills/impeccable/`
 
 ### Ce qu'il fait
 
@@ -506,7 +506,7 @@ Claude choisit automatiquement le pattern adapté au contenu de chaque card.
 
 | Skill | Quand l'utiliser | Commande type |
 |-------|------------------|---------------|
-| **taste** | Avant de construire n'importe quel UI | Auto — Claude lit `.claude/skills/taste/SKILL.md` et applique les design rules |
+| **impeccable** | Avant de construire n'importe quel UI | `/impeccable craft`, `/impeccable shape`, `/impeccable critique`, `/impeccable polish`, etc. |
 | **gsap-core** | Quand Claude écrit du code GSAP | Auto — Claude le consulte automatiquement |
 | **gsap-react** | Animations dans les composants React/Next.js | Auto |
 | **gsap-scrolltrigger** | Animations liées au scroll | Auto |
