@@ -19,6 +19,7 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Third-party skill scripts (not app code)
     ".claude/skills/**",
+    ".agents/skills/**",
   ]),
 ]);
 

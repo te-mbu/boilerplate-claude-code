@@ -564,11 +564,16 @@ async function main() {
   console.log("✅ Setup complete!");
   console.log("");
   console.log("Next steps:");
-  console.log("  pnpm dev                    # Start dev server");
-  console.log("  pnpm build                  # Verify build");
+  console.log("  1. Fill design-system/client-brief.md with brand context");
+  console.log("  2. Run /impeccable teach     # Creates PRODUCT.md + DESIGN.md");
+  console.log("  3. pnpm design               # Generate baseline tokens from brief");
+  console.log("  4. pnpm dev                  # Start dev server");
+  console.log("  5. Start building page by page with /impeccable craft");
   if (config.cms === "sanity") {
-    console.log("  pnpm add @sanity/client @sanity/image-url  # Install Sanity");
-    console.log("  # Add SANITY_API_TOKEN to .env.local");
+    console.log("");
+    console.log("  Sanity CMS:");
+    console.log("    pnpm add @sanity/client @sanity/image-url");
+    console.log("    Add SANITY_API_TOKEN to .env.local");
   }
   console.log("");
   console.log("To re-run after changing client.config.ts:");

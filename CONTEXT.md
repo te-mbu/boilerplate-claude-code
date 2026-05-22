@@ -59,10 +59,10 @@ Premier projet client depuis le boilerplate : **Basanto Studio** (portfolio agen
 
 1. **Brief client** — Tu recois les infos : nom, secteur, services, direction visuelle
 2. **Clone + config** — `client.config.ts` avec les infos client, `pnpm setup`
-3. **Design system** — Remplir `design-system/client-brief.md`, choisir les tokens (couleurs, typo, spacing)
-4. **Build page par page** — Tu travailles avec Claude Code section par section. Tu envoies des screenshots d'inspi, Claude Code adapte au design system du client.
-5. **Iterations** — "plus bold", "plus compact", "ajoute un gradient" — modifications directes sur les composants
-6. **Pre-launch** — Checklist (`design-system/checklist.md`), Lighthouse, accessibilite, responsive
+3. **Design context** — Remplir `design-system/client-brief.md`, puis `/impeccable teach` (cree PRODUCT.md + DESIGN.md), puis `pnpm design` (tokens baseline)
+4. **Build page par page** — `/impeccable craft [section]` ou screenshots d'inspi + "adapte ca pour le client"
+5. **Iterations** — `/impeccable bolder`, `/impeccable quieter`, ou feedback naturel ("plus bold", "decale a gauche")
+6. **Pre-launch** — `/impeccable polish` + `/impeccable audit` + checklist (`design-system/checklist.md`)
 7. **Deploy** — Vercel, domaine client
 
 Le boilerplate doit rendre les etapes 1-3 quasi-instantanees pour que tu passes le maximum de temps sur 4-5 (la ou la valeur est).

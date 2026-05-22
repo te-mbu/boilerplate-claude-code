@@ -28,7 +28,7 @@ interface Violation {
 }
 
 const violations: Violation[] = [];
-let codeCounter = { error: 0, warning: 0, info: 0 };
+const codeCounter = { error: 0, warning: 0, info: 0 };
 
 function addViolation(
   severity: Severity,
