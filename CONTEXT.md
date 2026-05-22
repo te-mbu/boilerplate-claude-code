@@ -94,6 +94,98 @@ Le boilerplate doit rendre les etapes 1-3 quasi-instantanees pour que tu passes 
 
 ---
 
+## Philosophie de creation — "Page Blanche"
+
+Le boilerplate ne contient PAS de sections pre-faites a assembler. Chaque section de chaque site est composee from scratch, guidee par :
+
+1. **Le brief client** (`design-system/client-brief.md`) — qui est le client, quelle personnalite, quel objectif
+2. **Les design tokens** (`globals.css`) — couleurs, typo, spacing, radius calibres pour le client
+3. **Le taste skill** (`.claude/skills/taste/SKILL.md`) — regles de design engineering, anti-patterns, arsenal creatif
+4. **Les primitives shadcn/ui** — Button, Card, Badge, Separator, Accordion... comme briques de base
+
+Le dossier `examples/sections/` existe comme inspiration lointaine, mais on n'importe jamais, on ne copie-colle jamais. Chaque section est une reponse unique au client.
+
+**Pourquoi :** Les templates generiques produisent des sites generiques. L'avantage de l'agence c'est que chaque livrable est sur mesure — meme si le process est rapide grace au boilerplate.
+
+---
+
+## Le taste skill — Moteur creatif
+
+Le taste skill a 3 dials qui pilotent toutes les decisions visuelles :
+
+| Dial | Baseline | Effet |
+|------|----------|-------|
+| DESIGN_VARIANCE (1-10) | 8 | 1=symetrique/previsible, 10=asymetrique/masonry/chaos |
+| MOTION_INTENSITY (1-10) | 6 | 1=statique, 10=choreographie scroll complexe |
+| VISUAL_DENSITY (1-10) | 4 | 1=art gallery/aerien, 10=cockpit/dense |
+
+**Ajustement par type de projet :**
+
+| Type | VARIANCE | MOTION | DENSITY | Vibe |
+|------|----------|--------|---------|------|
+| Portfolio creatif | 9 | 8 | 3 | Awwwards, art direction, mouvement |
+| Site vitrine | 7 | 5 | 4 | Pro, elegant, pas ennuyeux |
+| Landing page | 6 | 6 | 5 | Focus conversion, preuves, urgence |
+| Corporate | 5 | 4 | 5 | Sobre, credible, structure |
+| Blog / media | 6 | 3 | 6 | Lisible, fonctionnel, typographie |
+
+Ces valeurs sont un point de depart — le dev les ajuste selon le brief.
+
+---
+
+## Animated Artifacts
+
+Les artifacts sont des micro-UIs animees qui donnent vie aux sections. Ils transforment un site marketing en quelque chose qui "respire" — pas une brochure PDF statique.
+
+**Quand les utiliser :**
+- Hero sections — remplacer l'image placeholder par un artefact contextuel
+- Feature cards — illustrer chaque feature avec une mini-demo animee
+- Sections "proof" — stats animees, indicateurs live, timelines
+
+**Catalogue disponible :**
+- TypewriterFeed — texte qui se tape (tech, AI, monitoring)
+- GeometricMotif — SVG rotatif abstrait (branding, precision)
+- PulseIndicator — dot pulsant (status, confiance)
+- CardShuffler — cartes empilees qui rotent (plans, features)
+- Waveform — signal EKG/audio (sante, signal)
+- CursorProtocol — curseur anime qui clique (UX, demo produit)
+- OrbitalDiagram — orbites animees (ecosysteme, plateforme)
+
+**Regle :** Le contenu des artifacts est toujours derive du contexte business du client, jamais generique.
+
+---
+
+## Process d'iteration visuelle
+
+Le design se fait en live dans le browser. Pas de Figma, pas de maquettes pre-approuvees. Le cycle :
+
+1. **Claude Code compose** une section from scratch (taste skill + tokens + brief)
+2. **Le dev regarde** dans le browser (localhost)
+3. **Le dev donne du feedback** en langage naturel : "plus bold", "decale a gauche", "ajoute du mouvement ici", "les cards sont trop generiques"
+4. **Claude Code ajuste** directement le code — pas de nouveau fichier, modification in-place
+5. **Repeat** jusqu'a satisfaction
+
+Ce cycle doit etre rapide (< 30 sec entre feedback et resultat visible). C'est pourquoi :
+- Le dev server est toujours lance
+- Les modifications sont chirurgicales (pas de refactor)
+- On montre le resultat AVANT de passer a autre chose
+
+**Screenshots d'inspiration :** Le dev envoie parfois un screenshot d'un autre site pour donner une direction. Claude Code ne copie JAMAIS — il adapte l'intention au design system du client.
+
+---
+
+## Niveau d'ambition par type de projet
+
+| Type | Ambition visuelle | Reference |
+|------|-------------------|-----------|
+| Portfolio creatif | Awwwards-level. Animations complexes, layouts asymetriques, micro-interactions. Le site EST le portfolio. | Studios comme Locomotive, Resn, Active Theory |
+| Site vitrine | Elegant et memorable. Pas boring, mais pas showoff. Le contenu prime. | Stripe, Linear, Vercel |
+| Landing page | Conversion-first. Chaque pixel sert un objectif business. Design au service du message. | Basecamp, Carrd pro, Loom |
+| Corporate | Credible, structure, premium feel sans exces. La confiance se lit dans la sobriete. | McKinsey, Bain, mais en moderne |
+| Blog / media | Typographie soignee, lisibilite, hierarchy claire. Le contenu est roi. | Substack pro, Medium, iA Writer |
+
+---
+
 ## Notes libres
 
 - Le `BOILERPLATE-ISSUES.md` est le feedback loop : chaque friction rencontree sur un projet client y est documentee, puis corrigee dans le boilerplate source.
