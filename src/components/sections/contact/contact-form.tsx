@@ -46,7 +46,7 @@ export function ContactForm({ heading, description }: ContactFormProps) {
   }
 
   return (
-    <section className="px-4 py-12 md:py-20">
+    <section className="px-4 py-section">
       <div className="mx-auto max-w-xl">
         {(heading || description) && (
           <div className="mb-8 text-center">

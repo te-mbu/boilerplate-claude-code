@@ -18,6 +18,7 @@ export function BlogCard({ post }: BlogCardProps) {
             alt={post.mainImage.alt}
             width={post.mainImage.width ?? 600}
             height={post.mainImage.height ?? 340}
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="size-full object-cover transition-transform group-hover:scale-105"
           />
         </div>
@@ -43,6 +44,7 @@ export function BlogCard({ post }: BlogCardProps) {
                 alt={post.author.image.alt}
                 width={24}
                 height={24}
+                sizes="24px"
                 className="size-6 rounded-full object-cover"
               />
             )}

@@ -26,6 +26,7 @@ export function BlogArticle({ post }: BlogArticleProps) {
                   alt={post.author.image.alt}
                   width={32}
                   height={32}
+                  sizes="32px"
                   className="size-8 rounded-full object-cover"
                 />
               )}
@@ -51,6 +52,7 @@ export function BlogArticle({ post }: BlogArticleProps) {
             alt={post.mainImage.alt}
             width={post.mainImage.width ?? 1200}
             height={post.mainImage.height ?? 630}
+            sizes="(max-width: 768px) 100vw, 768px"
             className="w-full object-cover"
             priority
           />
@@ -71,6 +73,7 @@ export function BlogArticle({ post }: BlogArticleProps) {
                 alt={post.author.image.alt}
                 width={56}
                 height={56}
+                sizes="56px"
                 className="size-14 shrink-0 rounded-full object-cover"
               />
             )}

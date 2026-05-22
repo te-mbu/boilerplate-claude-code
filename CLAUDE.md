@@ -8,10 +8,10 @@ You are building a website for [CLIENT_NAME]. Read the design system files befor
 - UI primitives: shadcn/ui (src/components/ui/) — do NOT create duplicates
 - Design intelligence: taste skill (.claude/skills/taste/) — READ before building any UI
 - Custom components: src/components/{layout,sections,shared}/
-- Animations: GSAP (client-only, use-gsap hook, respect prefers-reduced-motion)
+- Animations: GSAP + Lenis smooth scroll (client-only, use-gsap hook, respect prefers-reduced-motion)
 - CMS: Content layer abstraction (src/lib/content/) — toggle via CONTENT_PROVIDER env
 - Deployment: Vercel
-- Forms: Server Actions + Zod validation + webhook to Make/n8n
+- Forms: API Routes + Zod validation + webhook to Make/n8n
 - i18n: next-intl (optional, disable in middleware for monolingual)
 
 ## Design System — READ BEFORE CODING

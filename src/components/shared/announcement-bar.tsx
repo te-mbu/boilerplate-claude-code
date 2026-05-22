@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface AnnouncementBarProps {
   message: string;
@@ -42,13 +43,15 @@ export function AnnouncementBar({
         </a>
       )}
       {dismissible && (
-        <button
+        <Button
+          variant="ghost"
+          size="icon-xs"
           onClick={handleDismiss}
           aria-label="Dismiss announcement"
-          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-sm p-0.5 hover:opacity-70"
+          className="absolute right-3 top-1/2 -translate-y-1/2"
         >
           <X className="size-4" />
-        </button>
+        </Button>
       )}
     </div>
   );
